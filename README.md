@@ -1,15 +1,30 @@
-# Elysia with Bun runtime
+# Toiloff backend
 
-## Getting Started
-To get started with this template, simply paste this command into your terminal:
-```bash
-bun create elysia ./elysia-example
-```
+My website backend written with [Bun](https://bun.com) and [Elysia](https://elysiajs.com/) ❤️
 
-## Development
-To start the development server run:
-```bash
-bun run dev
-```
+## Install
 
-Open http://localhost:3000/ with your browser to see the result.
+### Assets
+
+#### Bad usernames
+
+Rename `src/assets/bad-usernames.example.txt` to `src/assets/bad-usernames.txt`.
+
+It's required for username filtering, also support comments with `#-- <text> --#`.
+
+In production, i respect content from example file, but I added a few lines based on my usernames
+
+### Configs
+
+Please use env for set config values:
+...
+
+## Ratelimits
+
+Use your reverse proxy or cloudflare account to set ratelimits for API
+
+## Docs & Tests
+
+API can be tested with [Voiden](https://voiden.md/) see [docs](./docs/) for details
+
+All utility tests in **tests** folder, run with `bun test`.

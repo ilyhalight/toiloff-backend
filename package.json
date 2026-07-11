@@ -1,14 +1,31 @@
 {
-  "name": "app",
-  "version": "1.0.50",
+  "name": "toiloff-backend",
+  "version": "1.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/**/*.ts --watch src/assets/*.txt",
+    "start": "NODE_ENV=production bun src/index.ts",
+    "migrate": "MIGRATOR_ACTION=upgrade bun run src/migrator.ts",
+    "migrate:up": "bun run migrate",
+    "migrate:down": "MIGRATOR_ACTION=downgrade bun run src/migrator.ts",
+    "start:cold": "bun run migrate && bun run start"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@elysia/cors": "^1.4.2",
+    "@elysia/openapi": "^1.4.15",
+    "@elysia/static": "^1.4.11",
+    "@vaylo/pino": "^1.0.2",
+    "altcha-lib": "^2.2.0",
+    "elysia": "latest",
+    "elysia-http-status-code": "^1.0.9",
+    "jose": "^6.2.3",
+    "kysely": "^0.29.2",
+    "pg": "^8.22.0"
   },
+  "type": "module",
   "devDependencies": {
+    "@sinclair/typebox": "^0.34.49",
+    "@types/pg": "^8.20.0",
     "bun-types": "latest"
   },
   "module": "src/index.js"

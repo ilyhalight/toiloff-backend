@@ -1,5 +1,13 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# i don't want to share my lewds
+.env
+src/assets/bad-usernames.txt
+src/public/avatars
+
+bunfig.toml
+.vscode
+
 # dependencies
 /node_modules
 /.pnp

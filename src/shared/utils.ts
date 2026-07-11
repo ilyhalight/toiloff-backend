@@ -5,4 +5,4 @@ const humanFormatter = new Intl.NumberFormat("en", {
 
 export const getTimestamp = () => Math.floor(Date.now() / 1000);
 
-export const humanFormat = (value: number) => humanFormatter.format(value);
+export const humanFormat = (value: number | bigint) => humanFormatter.format(value);

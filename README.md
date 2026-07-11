@@ -28,3 +28,7 @@ Use your reverse proxy or cloudflare account to set ratelimits for API
 API can be tested with [Voiden](https://voiden.md/) see [docs](./docs/) for details
 
 All utility tests in **tests** folder, run with `bun test`.
+
+## Actualize data
+
+To actualize data from external sources you can use [toiloff-workers](https://github.com/ilyhalight/toiloff-workers)

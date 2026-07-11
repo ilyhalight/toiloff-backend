@@ -1,7 +1,8 @@
+import { sql } from "kysely";
+
 import { db } from "@/shared/database";
 import { BasicRepo } from "@/types/db";
 import { NewGuestMessage } from "./schema";
-import { sql } from "kysely";
 import { GuestMessageStatus } from "./entity";
 
 export type GetAllProps = {

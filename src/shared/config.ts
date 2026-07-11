@@ -13,6 +13,7 @@ const SCALAR_CDN = "https://unpkg.com/@scalar/api-reference@latest/dist/browser/
 const SERVER_PORT = Number.parseInt(Bun.env.SERVICE_PORT ?? "3001");
 const ASSETS_PATH = path.join(__dirname, "..", "assets");
 const GITHUB_URL = "https://github.com/ilyhalight/toiloff-backend";
+const DEFAULT_SERVICE_TOKEN = "LUMMPJfMLM_g=fQJTZet~3!htp4C!L]1";
 const DEFAULT_USERNAME = "root";
 const DEFAULT_PASSWORD = "root";
 const DEFAULT_AUTH_LIFETIME = 3600; // 1 hour
@@ -79,6 +80,7 @@ export const ConfigSchema = t.Object({
     keySignature: t.String(),
   }),
   auth: t.Object({
+    serviceToken: t.String({ default: DEFAULT_SERVICE_TOKEN }),
     username: t.String({ default: DEFAULT_USERNAME }),
     password: t.String({ default: DEFAULT_PASSWORD }),
     secret: t.String({ default: "doesnttrustit" }),
@@ -127,6 +129,7 @@ export default Value.Parse(ConfigSchema, {
     keySignature: Bun.env.CAPTCHA_KEY_SIGNATURE,
   },
   auth: {
+    serviceToken: Bun.env.AUTH_SERVICE_TOKEN,
     username: Bun.env.AUTH_USERNAME,
     password: await Bun.password.hash(Bun.env.AUTH_PASSWORD || DEFAULT_PASSWORD),
     secret: Bun.env.AUTH_SECRET,

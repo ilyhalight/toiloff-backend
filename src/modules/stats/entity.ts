@@ -1,8 +1,8 @@
 import { t } from "elysia";
 
 export const RawGithubSnapshot = t.Object({
-  stars: t.Number(),
-  commits: t.Number(),
+  stars: t.Number({ minimum: 0 }),
+  commits: t.Number({ minimum: 0 }),
 });
 
 export type RawGithubSnapshot = typeof RawGithubSnapshot.static;

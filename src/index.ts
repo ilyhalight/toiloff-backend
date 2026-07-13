@@ -16,6 +16,7 @@ import {
 } from "./modules/guestbook/error";
 import { InvalidCaptchaError } from "./modules/captcha/error";
 import { PasswordAuthFailedError, UnauthorizedError } from "./modules/auth/error";
+import projects from "./modules/projects";
 
 const {
   server: { hostname, port },
@@ -98,6 +99,7 @@ const app = new Elysia({
   .use(guestbook)
   .use(admin)
   .use(stats)
+  .use(projects)
   .listen({
     hostname,
     port,

@@ -1,23 +1,19 @@
 import { sql } from "kysely";
 
 import { db } from "@/shared/database";
-import { BasicRepo } from "@/types/db";
 import { NewGuestMessage } from "./schema";
 import { GuestMessageStatus } from "./entity";
+import { CursorOpts } from "@/types/cursor";
+import { DEFAULT_LIMIT } from "@/shared/cursor";
 
 export type GetAllProps = {
   status?: GuestMessageStatus;
-  cursor?: string;
-};
+} & CursorOpts;
 
-export const DEFAULT_LIMIT = 10;
-
-export abstract class GuestMessageRepo extends BasicRepo {
-  static readonly dbName: typeof BasicRepo.dbName = "tf_guest_messages";
-
+export abstract class GuestMessageRepo {
   static async create(message: NewGuestMessage) {
     return await db
-      .insertInto(this.dbName)
+      .insertInto("tf_guest_messages")
       .values(message)
       .returningAll()
       .executeTakeFirstOrThrow();
@@ -25,7 +21,7 @@ export abstract class GuestMessageRepo extends BasicRepo {
 
   static async getApproved(limit: number = 10) {
     return await db
-      .selectFrom(this.dbName)
+      .selectFrom("tf_guest_messages")
       .selectAll()
       .where("status", "=", "public")
       .limit(limit)
@@ -33,7 +29,7 @@ export abstract class GuestMessageRepo extends BasicRepo {
   }
 
   static async getAll({ status, cursor }: GetAllProps) {
-    let query = db.selectFrom(this.dbName);
+    let query = db.selectFrom("tf_guest_messages");
     if (status) {
       query = query.where("status", "=", status);
     }
@@ -51,7 +47,7 @@ export abstract class GuestMessageRepo extends BasicRepo {
 
   static async getStats() {
     return await db
-      .selectFrom(this.dbName)
+      .selectFrom("tf_guest_messages")
       .select(() => [
         sql<number>`COUNT(*) FILTER (WHERE status = 'review')::int`.as("review"),
         sql<number>`COUNT(*) FILTER (WHERE status = 'public')::int`.as("public"),
@@ -63,7 +59,7 @@ export abstract class GuestMessageRepo extends BasicRepo {
 
   static async approve(id: string, replyText?: string | null) {
     return await db
-      .updateTable(this.dbName)
+      .updateTable("tf_guest_messages")
       .set({ status: "public", updatedAt: sql`now()`, replyText })
       .where("id", "=", id)
       .returningAll()
@@ -72,7 +68,7 @@ export abstract class GuestMessageRepo extends BasicRepo {
 
   static async decline(id: string, replyText?: string | null) {
     return await db
-      .updateTable(this.dbName)
+      .updateTable("tf_guest_messages")
       .set({ status: "declined", updatedAt: sql`now()`, replyText })
       .where("id", "=", id)
       .returningAll()

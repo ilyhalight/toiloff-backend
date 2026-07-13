@@ -30,10 +30,6 @@ export abstract class CaptchaService {
 
   static async verify(payload: string) {
     try {
-      if (!captcha.enabled) {
-        return true;
-      }
-
       const { challenge, solution } = parsePayload(payload);
 
       const result = await verifySolution({

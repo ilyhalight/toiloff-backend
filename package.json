@@ -20,6 +20,7 @@
     "elysia-http-status-code": "^1.0.9",
     "jose": "^6.2.3",
     "kysely": "^0.29.2",
+    "lexorank": "^1.0.5",
     "pg": "^8.22.0"
   },
   "type": "module",

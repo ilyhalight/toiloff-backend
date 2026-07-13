@@ -32,3 +32,16 @@ All utility tests in **tests** folder, run with `bun test`.
 ## Actualize data
 
 To actualize data from external sources you can use [toiloff-workers](https://github.com/ilyhalight/toiloff-workers)
+
+## Roadmap
+
+Current planned roadmap with new features and other:
+
+### Features
+
+- [x] Implement project module
+- [ ] Implement logging with pino
+- [ ] Implement easy projects sorting with lexorank
+- [ ] Telegram notify on create new guest message
+- [ ] Implement blog module
+- [ ] Implement i18n

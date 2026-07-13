@@ -5,6 +5,7 @@ import { AuthModel } from "./model";
 
 import config from "@/shared/config";
 import { authResolver } from "./resolver";
+import { captchaResolver } from "../captcha/resolver";
 
 const {
   app: { domain },
@@ -14,7 +15,7 @@ const {
 export default new Elysia().group("/auth", (app) =>
   app
     .guard({}, (app) =>
-      app.post(
+      app.resolve(captchaResolver).post(
         "/token",
         async ({ body: { username, password }, cookie: { tf_auth_token } }) => {
           const { token, expiresAt } = await AuthService.createToken(username, password);

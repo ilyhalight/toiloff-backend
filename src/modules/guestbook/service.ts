@@ -1,12 +1,10 @@
 import { cache } from "@/shared/cache";
 import { GuestbookMessages } from "./model";
-import { DEFAULT_LIMIT, GetAllProps, GuestMessageRepo } from "./repo";
-import { calcCursor, extractUUIDfromCursor } from "@/shared/cursor";
+import { GetAllProps, GuestMessageRepo } from "./repo";
+import { calcResult, DEFAULT_CURSOR_CACHE_TTL, extractUUIDfromCursor } from "@/shared/cursor";
 import { log } from "@/logging";
 import { GuestMessageNotFoundError } from "./error";
 import { NewGuestMessage } from "./schema";
-
-const CURSOR_CACHE_TTL = 300; // 5 minutes
 
 export abstract class GuestMessageService {
   static prefix = "guest_messages";
@@ -59,11 +57,8 @@ export abstract class GuestMessageService {
       throw new Error("Failed to get guest messages");
     });
 
-    const hasNextPage = rows.length > DEFAULT_LIMIT;
-    const items = hasNextPage ? rows.slice(0, DEFAULT_LIMIT) : rows;
-    const nextCursor = calcCursor(items, hasNextPage);
-    const result = { items, nextCursor, pageSize: items.length };
-    await cache.set(key, result, CURSOR_CACHE_TTL);
+    const result = calcResult(rows);
+    await cache.set(key, result, DEFAULT_CURSOR_CACHE_TTL);
     return result;
   }
 

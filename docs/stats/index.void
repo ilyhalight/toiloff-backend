@@ -12,7 +12,7 @@ type: request-separator
 attrs:
   uid: 752fd380-05a6-4b38-874c-13c8f025c60f
   colorIndex: 2
-  label: Phantom Token
+  label: GET ALL STATS
 ---
 ```
 
@@ -76,7 +76,7 @@ type: request-separator
 attrs:
   uid: d57011d8-8ae4-43e4-b8dd-e594d3465e01
   colorIndex: 3
-  label: Lazy Lemur
+  label: UPSERT LLM SESSIONS
 ---
 ```
 ```void
@@ -148,7 +148,7 @@ content:
         row:
           - x-service-token
           - "{{SERVICE_TOKEN}}"
-          - null
+          - service token for auth
 ---
 ```
 ```void
@@ -172,3 +172,90 @@ attrs:
 ---
 ```
 %%EMPTY_LINE%%
+
+```void
+---
+type: request-separator
+attrs:
+  uid: f0117ef1-3453-45ee-8766-cda443f6178c
+  colorIndex: 7
+  label: SNAPSHOT GITHUB STATS
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: 14b2ac73-5ae1-4fa8-8372-4ee31b5b53ea
+content: Create a snapshot of github stats data
+---
+```
+```void
+---
+type: request
+attrs:
+  uid: 15eec1b6-67a1-43f5-94be-7e8434dddf4f
+content:
+  - type: method
+    attrs:
+      uid: a58e8857-94a6-4665-b051-49678096ecb7
+      method: POST
+      importedFrom: ""
+      visible: true
+    content: POST
+  - type: url
+    attrs:
+      uid: 320db547-45b5-45aa-8cdb-02ddba74e0cf
+    content: "{{API_HOST}}/v1/stats/snapshot"
+---
+```
+```void
+---
+type: json_body
+attrs:
+  uid: e27a9f65-f2fb-4581-befa-88cf83c9b363
+  body: |-
+    {
+      "commits": 657,
+      "stars": 3241
+    }
+---
+```
+```void
+---
+type: headers-table
+attrs:
+  uid: f127849d-b401-4170-8d06-c43f8723157e
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - x-service-token
+          - "{{SERVICE_TOKEN}}"
+          - service token for auth
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: 325e25a1-495e-4b55-8483-921ac85b7876
+content: "Response example:"
+---
+```
+```void
+---
+type: codeBlock
+attrs:
+  uid: 1b705f29-4c30-43fb-905a-1362f471b5bc
+  language: json
+  body: |-
+    {
+      "commits": 657,
+      "stars": 3241
+    }
+---
+```

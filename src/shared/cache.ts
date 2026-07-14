@@ -1,4 +1,4 @@
-import { redis, RedisClient } from "bun";
+import { RedisClient } from "bun";
 
 import config from "@/shared/config";
 
@@ -30,12 +30,12 @@ export const cache = {
   },
 
   async set<T>(key: string, value: T, ttl: number = defaultTtl) {
-    await redis.set(key, JSON.stringify(value), "EX", ttl);
+    await client.set(key, JSON.stringify(value), "EX", ttl);
     return true;
   },
 
   async del(key: string): Promise<void> {
-    await redis.del(key);
+    await client.del(key);
   },
 
   async remember<T>(key: string, factory: () => Promise<T>, ttl: number = defaultTtl) {

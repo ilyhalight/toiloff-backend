@@ -1,7 +1,8 @@
 services:
-  valkey:
+  tf-valkey:
     restart: always
     image: valkey/valkey:9.1-alpine
+    container_name: tf-valkey
     networks:
       - tf-net
     volumes:
@@ -11,9 +12,10 @@ services:
       interval: 5s
       retries: 20
 
-  db:
+  tf-db:
     restart: always
     image: postgres:18-alpine
+    container_name: tf-db
     networks:
       - tf-net
     volumes:
@@ -27,7 +29,7 @@ services:
       interval: 5s
       retries: 20
 
-  migrator:
+  tf-migrator:
     build:
       context: .
       target: migrator
@@ -39,11 +41,11 @@ services:
       CAPTCHA_SIGNATURE: your_captcha_signature
       CAPTCHA_KEY_SIGNATURE: your_captcha_key_signature
       POSTGRES_NAME: tf-backend
-      POSTGRES_HOST: db
+      POSTGRES_HOST: tf-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
     depends_on:
-      db:
+      tf-db:
         condition: service_healthy
     restart: "no"
 
@@ -56,11 +58,11 @@ services:
     ports:
       - "3001:3001"
     depends_on:
-      migrator:
+      tf-migrator:
         condition: service_completed_successfully
-      db:
+      tf-db:
         condition: service_healthy
-      valkey:
+      tf-valkey:
         condition: service_healthy
     networks:
       - tf-net
@@ -72,9 +74,9 @@ services:
       CAPTCHA_KEY_SIGNATURE: your_captcha_key_signature
       CAPTCHA_ENABLED: true
       AUTH_SERVICE_TOKEN: your_secret_token
-      REDIS_HOST: valkey
+      REDIS_HOST: tf-valkey
       POSTGRES_NAME: tf-backend
-      POSTGRES_HOST: db
+      POSTGRES_HOST: tf-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
 

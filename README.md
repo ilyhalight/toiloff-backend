@@ -17,7 +17,16 @@ In production, i respect content from example file, but I added a few lines base
 ### Configs
 
 Please use env for set config values:
-...
+
+```bash
+# APP_DOMAIN=https://toil.cc/api/
+POSTGRES_PASSWORD=mysecretpassword
+CAPTCHA_SIGNATURE=your_captcha_signature
+CAPTCHA_KEY_SIGNATURE=your_captcha_key_signature
+AUTH_USERNAME=root
+AUTH_PASSWORD=root
+AUTH_SERVICE_TOKEN=your_secret_token
+```
 
 ## Ratelimits
 

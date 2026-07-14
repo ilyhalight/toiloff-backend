@@ -105,7 +105,6 @@ const app = new Elysia({
         break;
     }
 
-    console.error(error);
     return {
       error: (error as Error).message,
     };

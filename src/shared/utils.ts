@@ -25,3 +25,5 @@ export function clearHref(href?: string | null): string | undefined {
 
   return href;
 }
+
+export const clearText = (text: string) => text.trim().replace(/\s+/g, " ");

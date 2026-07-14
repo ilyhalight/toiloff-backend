@@ -10,12 +10,12 @@ export class BadUsernameProvidedError extends Error {
 
 export class SuspiciousLinkProvidedError extends Error {
   constructor() {
-    super(`You're bughunter? This link looks suspicious and will be auto-filtered.`);
+    super("You're bughunter? This link looks suspicious and will be auto-filtered.");
   }
 }
 
 export class GuestMessageNotFoundError extends Error {
   constructor() {
-    super(`Guest message not found`);
+    super("Guest message not found");
   }
 }

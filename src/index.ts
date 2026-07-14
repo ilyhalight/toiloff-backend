@@ -19,6 +19,7 @@ import {
 } from "./modules/guestbook/error";
 import { InvalidCaptchaError } from "./modules/captcha/error";
 import { PasswordAuthFailedError, UnauthorizedError } from "./modules/auth/error";
+import { FieldEmptyError } from "./shared/error";
 
 const {
   server: { hostname, port },
@@ -75,6 +76,7 @@ const app = new Elysia({
     SUSPICIOUS_LINK_PROVIDED: SuspiciousLinkProvidedError,
     NOT_AUTHORIZED: UnauthorizedError,
     INVALID_CREDENTIALS: PasswordAuthFailedError,
+    FIELD_EMPTY: FieldEmptyError,
   })
   .onError(({ code, error, set, httpStatus }) => {
     switch (code) {
@@ -97,6 +99,9 @@ const app = new Elysia({
         break;
       case "SUSPICIOUS_LINK_PROVIDED":
         set.status = httpStatus.HTTP_418_IM_A_TEAPOT;
+        break;
+      case "FIELD_EMPTY":
+        set.status = httpStatus.HTTP_422_UNPROCESSABLE_ENTITY;
         break;
     }
 

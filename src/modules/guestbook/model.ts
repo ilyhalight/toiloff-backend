@@ -33,6 +33,8 @@ const CreateMessageBody = t.Composite([
   }),
 ]);
 
+export type CreateMessageBody = typeof CreateMessageBody.static;
+
 export const GuestbookModel = {
   createMessageBody: CreateMessageBody,
   messagesResponse: GuestbookMessages,

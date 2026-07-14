@@ -1,16 +1,10 @@
 import { Elysia } from "elysia";
+
 import { GuestbookModel } from "./model";
 import { GuestMessageService } from "./service";
-import config from "@/shared/config";
-import { BadUsernameProvidedError, SuspiciousLinkProvidedError } from "./error";
 import { captchaResolver } from "../captcha/resolver";
-import { isSuspiciousHref } from "@/shared/validator";
 import { saveAvatar } from "./avatar";
-import { clearHref } from "@/shared/utils";
-
-const {
-  assets: { badUsernames },
-} = config;
+import { validateGuestMessage } from "./validator";
 
 export default new Elysia({
   detail: {
@@ -36,18 +30,8 @@ export default new Elysia({
     .guard({}, (app) =>
       app.resolve(captchaResolver).post(
         "/",
-        async ({ body: { username, content, href, hrefText, avatar } }) => {
-          // sry, i rly need this
-          if (badUsernames.includes(username.toLowerCase())) {
-            throw new BadUsernameProvidedError();
-          }
-
-          href = clearHref(href);
-          // and this...
-          if (isSuspiciousHref(href)) {
-            throw new SuspiciousLinkProvidedError();
-          }
-
+        async ({ body }) => {
+          const { username, content, href, hrefText, avatar } = validateGuestMessage(body);
           const avatarUrl = await saveAvatar(avatar);
           const message = await GuestMessageService.create({
             username,

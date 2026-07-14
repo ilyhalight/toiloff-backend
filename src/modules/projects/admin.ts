@@ -1,37 +1,20 @@
 import { Elysia } from "elysia";
 import { ProjectModel } from "./model";
 import { ProjectService } from "./service";
-import { isSuspiciousHref } from "@/shared/validator";
-import { SuspiciousLinkProvidedError } from "../guestbook/error";
 import { LexoRank } from "lexorank";
 import { ProjectNotFound } from "./error";
-import { clearHref } from "@/shared/utils";
+import { validateProject } from "./validator";
 
 export default new Elysia().group("/projects", (app) =>
   app
     .post(
       "/",
-      async ({ body: { title, description, href, imageAlt, imageUrl, canShowOnMain } }) => {
-        const clearedHref = clearHref(href);
-        const clearedImageUrl = clearHref(imageUrl);
-        if (
-          !clearedHref ||
-          !clearedImageUrl ||
-          isSuspiciousHref(clearedHref) ||
-          isSuspiciousHref(clearedImageUrl)
-        ) {
-          throw new SuspiciousLinkProvidedError();
-        }
-
+      async ({ body }) => {
+        const clearBody = validateProject(body);
         const lastLexorank = await ProjectService.getLastLexorank();
         const lexorank = lastLexorank ? LexoRank.parse(lastLexorank).genNext() : LexoRank.min();
         return await ProjectService.create({
-          title,
-          description,
-          href: clearedHref,
-          imageAlt,
-          imageUrl: clearedImageUrl,
-          canShowOnMain,
+          ...clearBody,
           lexorank: lexorank.toString(),
         });
       },
@@ -67,34 +50,14 @@ export default new Elysia().group("/projects", (app) =>
     )
     .patch(
       "/:projectId",
-      async ({
-        params: { projectId },
-        body: { title, description, href, imageAlt, imageUrl, canShowOnMain },
-      }) => {
-        const clearedHref = clearHref(href);
-        const clearedImageUrl = clearHref(imageUrl);
-        if (
-          !clearedHref ||
-          !clearedImageUrl ||
-          isSuspiciousHref(clearedHref) ||
-          isSuspiciousHref(clearedImageUrl)
-        ) {
-          throw new SuspiciousLinkProvidedError();
-        }
-
+      async ({ params: { projectId }, body }) => {
+        const clearBody = validateProject(body);
         const project = await ProjectService.get(projectId);
         if (!project) {
           throw new ProjectNotFound();
         }
 
-        const result = await ProjectService.update(projectId, {
-          title,
-          description,
-          href: clearedHref,
-          imageAlt,
-          imageUrl: clearedImageUrl,
-          canShowOnMain,
-        });
+        const result = await ProjectService.update(projectId, clearBody);
         if (!result) {
           throw new ProjectNotFound();
         }

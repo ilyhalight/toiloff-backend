@@ -16,12 +16,31 @@ attrs:
 ---
 ```
 
-Let's get all public guestbook messages.
-
-By default returns latest 10 availabled messages (or less if there isn't enough)
-
-Supported query params:
-
+```void
+---
+type: paragraph
+attrs:
+  uid: d2e26533-4512-4eec-b58d-528e8828478b
+content: Let's get all public guestbook messages.
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: b9b74fc7-17a7-43ee-94d1-293eed0e0b7f
+content: By default returns latest 10 availabled messages (or less if there
+  isn't enough)
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: 8fe0083f-593f-4783-867c-afdbaa8b745a
+content: "Supported query params:"
+---
+```
 ```void
 ---
 type: table
@@ -37,6 +56,8 @@ content:
           colwidth: null
         content:
           - type: paragraph
+            attrs:
+              uid: null
             content: param
       - type: tableCell
         attrs:
@@ -45,6 +66,8 @@ content:
           colwidth: null
         content:
           - type: paragraph
+            attrs:
+              uid: null
             content: desc
   - type: tableRow
     attrs:
@@ -57,6 +80,8 @@ content:
           colwidth: null
         content:
           - type: paragraph
+            attrs:
+              uid: null
             content: ---------
       - type: tableCell
         attrs:
@@ -65,6 +90,8 @@ content:
           colwidth: null
         content:
           - type: paragraph
+            attrs:
+              uid: null
             content: --------
   - type: tableRow
     attrs:
@@ -77,6 +104,8 @@ content:
           colwidth: null
         content:
           - type: paragraph
+            attrs:
+              uid: null
             content: cursor (optional)
       - type: tableCell
         attrs:
@@ -85,6 +114,8 @@ content:
           colwidth: null
         content:
           - type: paragraph
+            attrs:
+              uid: null
             content: load next values by this cursor position
 ---
 ```
@@ -125,38 +156,82 @@ content:
           - "200"
 ---
 ```
-Response example:
-
-```json
-{
-  "items": [
-    {
-      "id": "019f38ca-f4ea-725f-9860-fd52b5e9a2a4",
-      "username": "toil2",
-      "content": "hello223",
-      "status": "public",
-      "href": null,
-      "hrefText": null,
-      "avatarUrl": null,
-      "replyText": null,
-      "createdAt": "2026-07-06T15:57:32.905Z",
-      "updatedAt": "2026-07-06T16:20:17.451Z"
-    },
-    // ...
-  ],
-  "nextCursor": null,
-  "pageSize": 1
-}
+```void
+---
+type: paragraph
+attrs:
+  uid: bacc132a-e110-4bce-a814-c6d87c5040a5
+content: "Response example:"
+---
 ```
-
-> Avatar Note
->
-> `avatarUrl` can be abs path (manually set in db) or relative files - \`<filename>.<file_ext>\`.
->
-> If it's a relative file, u need to use this href to get image - `{{API_HOST}}/v1/public/avatars/<filename>.<file_ext>`
->
-> %%EMPTY_LINE%%
-
+```void
+---
+type: codeBlock
+attrs:
+  uid: a820d4e3-d10b-4ba5-865f-b39951ce2cca
+  language: json
+  body: |-
+    {
+      "items": [
+        {
+          "id": "019f38ca-f4ea-725f-9860-fd52b5e9a2a4",
+          "username": "toil2",
+          "content": "hello223",
+          "status": "public",
+          "href": null,
+          "hrefText": null,
+          "avatarUrl": null,
+          "replyText": null,
+          "createdAt": "2026-07-06T15:57:32.905Z",
+          "updatedAt": "2026-07-06T16:20:17.451Z"
+        },
+        // ...
+      ],
+      "nextCursor": null,
+      "pageSize": 1
+    }
+---
+```
+```void
+---
+type: blockquote
+attrs:
+  uid: f236c2d1-c85e-4a74-ad84-4a319d602383
+content:
+  - type: paragraph
+    attrs:
+      uid: null
+    content: Avatar Note
+  - type: paragraph
+    attrs:
+      uid: null
+    content:
+      - type: text
+        marks:
+          - type: code
+        text: avatarUrl
+      - type: text
+        text: " can be abs path (manually set in db) or relative files - `"
+      - type: text
+        text: <filename>
+      - type: text
+        text: .<file_ext>`.
+  - type: paragraph
+    attrs:
+      uid: null
+    content:
+      - type: text
+        text: "If it's a relative file, u need to use this href to get image - "
+      - type: text
+        marks:
+          - type: code
+        text: "{{API_HOST}}/v1/public/avatars/<filename>.<file_ext>"
+  - type: paragraph
+    attrs:
+      uid: null
+    content: "%%EMPTY_LINE%%"
+---
+```
 ```void
 ---
 type: request-separator
@@ -166,12 +241,38 @@ attrs:
   label: Create message
 ---
 ```
-Let's create guestbook message.
-
-> WARNING
->
-> In PROD requires `x-captcha-payload` header!
-
+```void
+---
+type: paragraph
+attrs:
+  uid: 1a88722c-617a-4252-9fed-e8044b3ea622
+content: Let's create guestbook message.
+---
+```
+```void
+---
+type: blockquote
+attrs:
+  uid: 2f2f80c3-be0f-4876-9a04-08adc9653b76
+content:
+  - type: paragraph
+    attrs:
+      uid: null
+    content: WARNING
+  - type: paragraph
+    attrs:
+      uid: null
+    content:
+      - type: text
+        text: "In PROD requires "
+      - type: text
+        marks:
+          - type: code
+        text: x-captcha-payload
+      - type: text
+        text: " header!"
+---
+```
 ```void
 ---
 type: request
@@ -191,8 +292,28 @@ content:
     content: "{{API_HOST}}/v1/guestbook"
 ---
 ```
-Recommended body `content-type` depends by `avatar` field
-
+```void
+---
+type: paragraph
+attrs:
+  uid: 8026b195-5c21-4c97-a6ba-085363dd8d73
+content:
+  - type: text
+    text: "Recommended body "
+  - type: text
+    marks:
+      - type: code
+    text: content-type
+  - type: text
+    text: " depends by "
+  - type: text
+    marks:
+      - type: code
+    text: avatar
+  - type: text
+    text: " field"
+---
+```
 %%EMPTY_LINE%%
 
 ```void
@@ -202,7 +323,9 @@ attrs:
   uid: c0b24390-1073-4c1a-bb1f-63302f952c10
   body: |-
     {
-      
+      "username": "toil2",
+      "content": "hello223",
+      "status": "public"
     }
 ---
 ```
@@ -224,34 +347,76 @@ content:
           - "200"
 ---
 ```
-Response example:
-
-```json
-{
-  "items": [
-    {
-      "id": "019f38ca-f4ea-725f-9860-fd52b5e9a2a4",
-      "username": "toil2",
-      "content": "hello223",
-      "status": "public",
-      "href": null,
-      "hrefText": null,
-      "avatarUrl": null,
-      "replyText": null,
-      "createdAt": "2026-07-06T15:57:32.905Z",
-      "updatedAt": "2026-07-06T16:20:17.451Z"
-    },
-    // ...
-  ],
-  "nextCursor": null,
-  "pageSize": 1
-}
+```void
+---
+type: paragraph
+attrs:
+  uid: c1d465db-ef28-471e-9a6b-2d7efe89c139
+content: "Response example:"
+---
 ```
-
-> Avatar Note
->
-> `avatarUrl` can be abs path (manually set in db) or relative files - \`<filename>.<file_ext>\`.
->
-> If it's a relative file, u need to use this href to get image - `{{API_HOST}}/v1/public/avatars/<filename>.<file_ext>`
-
+```void
+---
+type: codeBlock
+attrs:
+  uid: 0ba0bcec-7cb0-4a8d-be08-99d7dd009e80
+  language: json
+  body: |-
+    {
+      "items": [
+        {
+          "id": "019f38ca-f4ea-725f-9860-fd52b5e9a2a4",
+          "username": "toil2",
+          "content": "hello223",
+          "status": "public",
+          "href": null,
+          "hrefText": null,
+          "avatarUrl": null,
+          "replyText": null,
+          "createdAt": "2026-07-06T15:57:32.905Z",
+          "updatedAt": "2026-07-06T16:20:17.451Z"
+        },
+        // ...
+      ],
+      "nextCursor": null,
+      "pageSize": 1
+    }
+---
+```
+```void
+---
+type: blockquote
+attrs:
+  uid: ed320503-846d-4200-8c1c-e3f29d145639
+content:
+  - type: paragraph
+    attrs:
+      uid: null
+    content: Avatar Note
+  - type: paragraph
+    attrs:
+      uid: null
+    content:
+      - type: text
+        marks:
+          - type: code
+        text: avatarUrl
+      - type: text
+        text: " can be abs path (manually set in db) or relative files - `"
+      - type: text
+        text: <filename>
+      - type: text
+        text: .<file_ext>`.
+  - type: paragraph
+    attrs:
+      uid: null
+    content:
+      - type: text
+        text: "If it's a relative file, u need to use this href to get image - "
+      - type: text
+        marks:
+          - type: code
+        text: "{{API_HOST}}/v1/public/avatars/<filename>.<file_ext>"
+---
+```
 %%EMPTY_LINE%%

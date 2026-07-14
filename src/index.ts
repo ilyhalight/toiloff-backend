@@ -9,6 +9,9 @@ import guestbook from "./modules/guestbook";
 import admin from "./modules/admin";
 import captcha from "./modules/captcha";
 import stats from "./modules/stats";
+import projects from "./modules/projects";
+import funny from "./modules/funny";
+
 import {
   BadUsernameProvidedError,
   GuestMessageNotFoundError,
@@ -16,7 +19,6 @@ import {
 } from "./modules/guestbook/error";
 import { InvalidCaptchaError } from "./modules/captcha/error";
 import { PasswordAuthFailedError, UnauthorizedError } from "./modules/auth/error";
-import projects from "./modules/projects";
 
 const {
   server: { hostname, port },
@@ -100,6 +102,7 @@ const app = new Elysia({
   .use(admin)
   .use(stats)
   .use(projects)
+  .use(funny)
   .listen({
     hostname,
     port,

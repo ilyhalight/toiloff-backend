@@ -90,7 +90,7 @@ attrs:
 type: request-separator
 attrs:
   uid: 005a44b1-7bac-4bb1-abea-d896ace09012
-  colorIndex: 0
+  colorIndex: 4
   label: GET ALL
 ---
 ```
@@ -248,6 +248,73 @@ attrs:
       ],
       "nextCursor": null,
       "pageSize": 1
+    }
+---
+```
+%%EMPTY_LINE%%
+
+```void
+---
+type: request-separator
+attrs:
+  uid: 916e6b3a-72a0-4cb8-8c14-b464ea3971c6
+  colorIndex: 5
+  label: GET BY ID
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: 02c95ae4-ea5f-4e28-b219-613fa34f48d4
+content: Get a project by id
+---
+```
+```void
+---
+type: request
+attrs:
+  uid: d065c131-b2d0-4551-a591-365b39b9b042
+content:
+  - type: method
+    attrs:
+      uid: 7ec516d7-eb1d-4485-b2df-ea2e365f4414
+      method: GET
+      importedFrom: ""
+      visible: true
+    content: GET
+  - type: url
+    attrs:
+      uid: c547c3d2-87ae-4fbd-9451-0780a7225c94
+    content: "{{API_HOST}}/v1/admin/projects/019f5890-2eb6-7a03-a537-9ba13b80ac5d"
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: 1e833c6c-69b7-482c-be79-f9d659f2a440
+content: "Response example:"
+---
+```
+```void
+---
+type: codeBlock
+attrs:
+  uid: 901df63f-47e6-4889-816a-740a782c3b16
+  language: json
+  body: >-
+    {
+      "id": "019f5890-2eb6-7a03-a537-9ba13b80ac5d",
+      "title": "Yes cool",
+      "description": "a not cool desc",
+      "href": "https://github.com/ilyhalight/voice-over-translation",
+      "imageUrl": "https://github.com/ilyhalight/voice-over-translation/raw/master/img/example.png",
+      "imageAlt": "coolify image",
+      "canShowOnMain": true,
+      "lexorank": "0|000000:",
+      "createdAt": "2026-07-12T20:01:11.987Z",
+      "updatedAt": "2026-07-12T20:01:11.987Z"
     }
 ---
 ```

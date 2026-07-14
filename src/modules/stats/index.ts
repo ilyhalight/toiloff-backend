@@ -4,7 +4,11 @@ import { StatsModel } from "./model";
 import { StatsService } from "./service";
 import { serviceResolver } from "../auth/resolver";
 
-export default new Elysia().group("/stats", (app) =>
+export default new Elysia({
+  detail: {
+    tags: ["Stats"],
+  },
+}).group("/stats", (app) =>
   app
     .get(
       "/",
@@ -14,6 +18,9 @@ export default new Elysia().group("/stats", (app) =>
       {
         response: {
           200: StatsModel.getStatsResponse,
+        },
+        detail: {
+          summary: "Get a stats",
         },
       },
     )
@@ -30,6 +37,9 @@ export default new Elysia().group("/stats", (app) =>
             response: {
               200: StatsModel.upsertSessionsResponse,
             },
+            detail: {
+              summary: "Upsert LLM sessions",
+            },
           },
         )
         .post(
@@ -41,6 +51,9 @@ export default new Elysia().group("/stats", (app) =>
             body: StatsModel.createSnapshotBody,
             response: {
               200: StatsModel.createSnapshotResponse,
+            },
+            detail: {
+              summary: "Upload Github stats snapshot",
             },
           },
         ),

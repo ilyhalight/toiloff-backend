@@ -14,6 +14,9 @@ export default new Elysia().group("/guestbook", (app) =>
         response: {
           200: GuestbookModel.adminMessagesResponse,
         },
+        detail: {
+          summary: "Get all guestbook messages",
+        },
       },
     )
     .post(
@@ -27,6 +30,9 @@ export default new Elysia().group("/guestbook", (app) =>
         response: {
           200: GuestbookModel.messageResponse,
         },
+        detail: {
+          summary: "Approve guestbook message",
+        },
       },
     )
     .post(
@@ -39,6 +45,9 @@ export default new Elysia().group("/guestbook", (app) =>
         body: GuestbookModel.replyBody,
         response: {
           200: GuestbookModel.messageResponse,
+        },
+        detail: {
+          summary: "Decline guestbook message",
         },
       },
     ),

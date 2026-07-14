@@ -3,7 +3,11 @@ import { ProjectService } from "./service";
 import { ProjectModel } from "./model";
 import { ProjectNotFound } from "./error";
 
-export default new Elysia().group("/projects", (app) =>
+export default new Elysia({
+  detail: {
+    tags: ["Projects"],
+  },
+}).group("/projects", (app) =>
   app
     .get(
       "/",
@@ -15,6 +19,9 @@ export default new Elysia().group("/projects", (app) =>
         response: {
           200: ProjectModel.getAllResponse,
         },
+        detail: {
+          summary: "Get all projects",
+        },
       },
     )
     .get(
@@ -25,6 +32,9 @@ export default new Elysia().group("/projects", (app) =>
       {
         response: {
           200: ProjectModel.getMainPageResponse,
+        },
+        detail: {
+          summary: "Get a projects for main page",
         },
       },
     )
@@ -42,6 +52,9 @@ export default new Elysia().group("/projects", (app) =>
         params: ProjectModel.getParam,
         response: {
           200: ProjectModel.getResponse,
+        },
+        detail: {
+          summary: "Get a project",
         },
       },
     ),

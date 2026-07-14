@@ -32,6 +32,9 @@ export default new Elysia().group("/projects", (app) =>
         response: {
           200: ProjectModel.createResponse,
         },
+        detail: {
+          summary: "Get all projects",
+        },
       },
     )
     .delete(
@@ -48,6 +51,9 @@ export default new Elysia().group("/projects", (app) =>
         params: ProjectModel.deleteParam,
         response: {
           200: ProjectModel.deleteResponse,
+        },
+        detail: {
+          summary: "Delete a project",
         },
       },
     )
@@ -85,6 +91,9 @@ export default new Elysia().group("/projects", (app) =>
         body: ProjectModel.updateBody,
         response: {
           200: ProjectModel.updateResponse,
+        },
+        detail: {
+          summary: "Update a project",
         },
       },
     ),

@@ -1,5 +1,5 @@
 import { Elysia } from "elysia";
-import openapi from "@elysia/openapi";
+import openapi, { ElysiaOpenAPIConfig } from "@elysia/openapi";
 import { HttpStatusCode } from "elysia-http-status-code";
 import cors from "@elysia/cors";
 import staticPlugin from "@elysia/static";
@@ -25,30 +25,38 @@ const {
   app: { name: title, desc: description, version, license, githubUrl, domain, publicPath },
 } = config;
 
+const documentation: ElysiaOpenAPIConfig["documentation"] = {
+  info: {
+    title,
+    description,
+    version,
+    license: {
+      name: license,
+    },
+    contact: {
+      name: "Developer",
+      url: githubUrl,
+    },
+  },
+};
+
+if (domain !== "localhost") {
+  documentation.servers = [
+    {
+      url: domain,
+    },
+  ];
+}
+
 const app = new Elysia({
   prefix: "/v1",
 })
   .use(
     openapi({
       path: "/docs",
-      documentation: {
-        info: {
-          title,
-          description,
-          version,
-          license: {
-            name: license,
-          },
-          contact: {
-            name: "Developer",
-            url: githubUrl,
-          },
-        },
-        servers: [
-          {
-            url: domain,
-          },
-        ],
+      documentation,
+      exclude: {
+        paths: ["/v1/public/*", "/v1/public"],
       },
     }),
   )

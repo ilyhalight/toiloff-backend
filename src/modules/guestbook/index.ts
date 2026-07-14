@@ -11,7 +11,11 @@ const {
   assets: { badUsernames },
 } = config;
 
-export default new Elysia().group("/guestbook", (app) =>
+export default new Elysia({
+  detail: {
+    tags: ["Guestbook"],
+  },
+}).group("/guestbook", (app) =>
   app
     .get(
       "/",
@@ -22,6 +26,9 @@ export default new Elysia().group("/guestbook", (app) =>
         query: GuestbookModel.getPublicQuery,
         response: {
           200: GuestbookModel.messagesResponse,
+        },
+        detail: {
+          summary: "Get all public guestbook messages",
         },
       },
     )
@@ -54,6 +61,9 @@ export default new Elysia().group("/guestbook", (app) =>
           body: GuestbookModel.createMessageBody,
           response: {
             200: GuestbookModel.messageResponse,
+          },
+          detail: {
+            summary: "Create a new guestbook message",
           },
         },
       ),

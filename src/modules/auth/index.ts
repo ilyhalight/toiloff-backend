@@ -39,6 +39,9 @@ export default new Elysia().group("/auth", (app) =>
           response: {
             200: AuthModel.authTokenResponse,
           },
+          detail: {
+            summary: "Create a auth token by credentials",
+          },
         },
       ),
     )

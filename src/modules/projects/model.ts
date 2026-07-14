@@ -18,10 +18,21 @@ export const ProjectsWithNav = t.Composite([
 
 export type ProjectsWithNav = typeof ProjectsWithNav.static;
 
+export const ProjectParam = t.Object({
+  projectId: t.String(),
+});
+
 export const ProjectModel = {
   getAllResponse: ProjectsWithNav,
   getAllQuery: CursorQuery,
   getMainPageResponse: t.Array(Project),
   createBody: createProject,
   createResponse: Project,
+  getParam: ProjectParam,
+  getResponse: Project,
+  deleteParam: ProjectParam,
+  deleteResponse: Project,
+  updateParam: ProjectParam,
+  updateBody: createProject,
+  updateResponse: Project,
 };

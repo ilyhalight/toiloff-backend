@@ -1,5 +1,5 @@
 import { db } from "@/shared/database";
-import { NewProject, Project } from "./schema";
+import { NewProject, Project, ProjectUpdate } from "./schema";
 import { CursorOpts } from "@/types/cursor";
 import { DEFAULT_LIMIT } from "@/shared/cursor";
 
@@ -18,7 +18,7 @@ export abstract class ProjectRepo {
 
     return await query
       .selectAll()
-      .orderBy("lexorank", "desc")
+      .orderBy("lexorank", "asc")
       .limit(DEFAULT_LIMIT + 1)
       .execute();
   }
@@ -28,7 +28,7 @@ export abstract class ProjectRepo {
       .selectFrom("tf_projects")
       .where("canShowOnMain", "=", true)
       .selectAll()
-      .orderBy("lexorank", "desc")
+      .orderBy("lexorank", "asc")
       .limit(MAIN_PAGE_LIMIT)
       .execute();
   }
@@ -42,5 +42,22 @@ export abstract class ProjectRepo {
       .executeTakeFirst();
 
     return query?.lexorank;
+  }
+
+  static async get(id: string) {
+    return db.selectFrom("tf_projects").where("id", "=", id).selectAll().executeTakeFirst();
+  }
+
+  static async delete(id: string) {
+    return db.deleteFrom("tf_projects").where("id", "=", id).returningAll().executeTakeFirst();
+  }
+
+  static async update(id: string, updateWith: ProjectUpdate) {
+    return db
+      .updateTable("tf_projects")
+      .set(updateWith)
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirst();
   }
 }

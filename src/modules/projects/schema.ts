@@ -15,4 +15,4 @@ export type ProjectTable = {
 
 export type Project = Selectable<ProjectTable>;
 export type NewProject = Omit<Insertable<ProjectTable>, "id" | "createdAt" | "updatedAt">;
-export type ProjectUpdate = Updateable<ProjectTable>;
+export type ProjectUpdate = Omit<Updateable<ProjectTable>, "id" | "createdAt">;

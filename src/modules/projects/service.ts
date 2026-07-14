@@ -2,7 +2,7 @@ import { cache } from "@/shared/cache";
 import { log } from "@/logging";
 
 import { ProjectRepo } from "./repo";
-import { NewProject } from "./schema";
+import { NewProject, Project, ProjectUpdate } from "./schema";
 import { CursorOpts } from "@/types/cursor";
 import { calcResult, DEFAULT_CURSOR_CACHE_TTL, extractUUIDfromCursor } from "@/shared/cursor";
 import { ProjectsWithNav } from "./model";
@@ -19,8 +19,8 @@ export abstract class ProjectService {
       return result;
     }
 
-    await cache.del(`${this.prefix}:main`);
     await cache.set(`${this.prefix}:last-lexorank`, result.lexorank);
+    await cache.del(`${this.prefix}:main`);
     await cache.incrVersion(`${this.prefix}:version`);
     return result;
   }
@@ -62,6 +62,51 @@ export abstract class ProjectService {
       await cache.set(cacheKey, result);
     }
 
+    return result;
+  }
+
+  static async get(id: string) {
+    const cachedKey = `${this.prefix}:${id}`;
+    const cached = await cache.get<Project>(cachedKey);
+    if (cached) {
+      return cached;
+    }
+
+    const result = await ProjectRepo.get(id);
+    if (!result) {
+      return result;
+    }
+
+    await cache.set(`${this.prefix}:${id}`, result);
+    return result;
+  }
+
+  static async delete(id: string) {
+    const result = await ProjectRepo.delete(id);
+    if (!result) {
+      return result;
+    }
+
+    await cache.del(`${this.prefix}:last-lexorank`);
+    await cache.del(`${this.prefix}:main`);
+    await cache.del(`${this.prefix}:${id}`);
+    await cache.incrVersion(`${this.prefix}:version`);
+    return result;
+  }
+
+  static async update(id: string, updateWith: ProjectUpdate) {
+    const result = await ProjectRepo.update(id, updateWith);
+    if (!result) {
+      return result;
+    }
+
+    if (Object.hasOwn(updateWith, "lexorank")) {
+      await cache.del(`${this.prefix}:last-lexorank`);
+    }
+
+    await cache.del(`${this.prefix}:main`);
+    await cache.set(`${this.prefix}:${id}`, result);
+    await cache.incrVersion(`${this.prefix}:version`);
     return result;
   }
 }

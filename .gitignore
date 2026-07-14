@@ -5,6 +5,11 @@
 src/assets/bad-usernames.txt
 src/public/avatars
 
+# docker
+/db
+/valkey
+/public
+
 bunfig.toml
 .vscode
 

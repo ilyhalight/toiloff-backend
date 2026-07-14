@@ -28,6 +28,45 @@ AUTH_PASSWORD=root
 AUTH_SERVICE_TOKEN=your_secret_token
 ```
 
+### With Docker
+
+1. Install Docker
+2. Make sure that you renamed `src/assets/bad-usernames.example.txt` to `src/assets/bad-usernames.txt`
+3. Build the image
+
+```bash
+docker build -t "tf-backend" .
+```
+
+3. Run with docker-compose
+
+```bash
+docker compose up -d
+```
+
+### Without docker
+
+1. Install Bun, PostgreSQL 18, Valkey (Redis)
+2. Install depends
+
+```bash
+bun install
+```
+
+3. Make sure that you renamed `src/assets/bad-usernames.example.txt` to `src/assets/bad-usernames.txt`
+4. Rename `.example.env` -> `.env` and fill it
+5. Migrate DB
+
+```bash
+bun migrate
+```
+
+6. Run server
+
+```bash
+bun start
+```
+
 ## Ratelimits
 
 Use your reverse proxy or cloudflare account to set ratelimits for API

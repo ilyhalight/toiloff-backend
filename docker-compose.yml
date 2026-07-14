@@ -1,0 +1,83 @@
+services:
+  valkey:
+    restart: always
+    image: valkey/valkey:9.1-alpine
+    networks:
+      - tf-net
+    volumes:
+      - ./valkey:/data
+    healthcheck:
+      test: "valkey-cli ping"
+      interval: 5s
+      retries: 20
+
+  db:
+    restart: always
+    image: postgres:18-alpine
+    networks:
+      - tf-net
+    volumes:
+      - ./db:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: tf-backend
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    healthcheck:
+      test: "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"
+      interval: 5s
+      retries: 20
+
+  migrator:
+    build:
+      context: .
+      target: migrator
+    container_name: tf-migrator
+    networks:
+      - tf-net
+    environment:
+      # any values for captcha env. only to skip config parse
+      CAPTCHA_SIGNATURE: your_captcha_signature
+      CAPTCHA_KEY_SIGNATURE: your_captcha_key_signature
+      POSTGRES_NAME: tf-backend
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  tf-backend:
+    build:
+      context: .
+      target: final
+    container_name: tf-backend
+    restart: always
+    ports:
+      - "3001:3001"
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
+    networks:
+      - tf-net
+    volumes:
+      - ./public:/app/src/public
+      - ./src/assets:/app/src/assets
+    environment:
+      CAPTCHA_SIGNATURE: your_captcha_signature
+      CAPTCHA_KEY_SIGNATURE: your_captcha_key_signature
+      CAPTCHA_ENABLED: true
+      AUTH_SERVICE_TOKEN: your_secret_token
+      REDIS_HOST: valkey
+      POSTGRES_NAME: tf-backend
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+
+networks:
+  tf-net:
+    driver: bridge

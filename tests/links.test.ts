@@ -1,6 +1,6 @@
 import { test, describe } from "bun:test";
 
-import { isSuspiciousHref } from "@/shared/links";
+import { isSuspiciousHref } from "@/shared/validator";
 
 const suspiciousHrefs = [
   "javascript:alert(1)",
@@ -22,6 +22,15 @@ const suspiciousHrefs = [
   "./",
   "./test",
   "/test",
+  "//test",
+  "http://test",
+  "example.com/../test",
+  "example.com/./test",
+  "javascript/alert",
+  "",
+  "       test",
+  "        ",
+  "test.me       ",
 ];
 
 const legitHrefs = [
@@ -37,6 +46,9 @@ const legitHrefs = [
   "http://example.com/kiss?someone=true&another=false",
   "http://example.com/:3",
   "//example.com/test",
+  "//www.example.com/test",
+  "//example.com",
+  "//big.example.com",
   "javascript.com/alert",
   "https://жспобеда.рф/",
 ];

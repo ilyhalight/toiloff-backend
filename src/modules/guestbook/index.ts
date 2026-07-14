@@ -4,8 +4,9 @@ import { GuestMessageService } from "./service";
 import config from "@/shared/config";
 import { BadUsernameProvidedError, SuspiciousLinkProvidedError } from "./error";
 import { captchaResolver } from "../captcha/resolver";
-import { isSuspiciousHref } from "@/shared/links";
+import { isSuspiciousHref } from "@/shared/validator";
 import { saveAvatar } from "./avatar";
+import { clearHref } from "@/shared/utils";
 
 const {
   assets: { badUsernames },
@@ -41,6 +42,7 @@ export default new Elysia({
             throw new BadUsernameProvidedError();
           }
 
+          href = clearHref(href);
           // and this...
           if (isSuspiciousHref(href)) {
             throw new SuspiciousLinkProvidedError();

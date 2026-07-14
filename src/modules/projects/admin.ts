@@ -1,17 +1,25 @@
 import { Elysia } from "elysia";
 import { ProjectModel } from "./model";
 import { ProjectService } from "./service";
-import { isSuspiciousHref } from "@/shared/links";
+import { isSuspiciousHref } from "@/shared/validator";
 import { SuspiciousLinkProvidedError } from "../guestbook/error";
 import { LexoRank } from "lexorank";
 import { ProjectNotFound } from "./error";
+import { clearHref } from "@/shared/utils";
 
 export default new Elysia().group("/projects", (app) =>
   app
     .post(
       "/",
       async ({ body: { title, description, href, imageAlt, imageUrl, canShowOnMain } }) => {
-        if (isSuspiciousHref(href) || isSuspiciousHref(imageUrl)) {
+        const clearedHref = clearHref(href);
+        const clearedImageUrl = clearHref(imageUrl);
+        if (
+          !clearedHref ||
+          !clearedImageUrl ||
+          isSuspiciousHref(clearedHref) ||
+          isSuspiciousHref(clearedImageUrl)
+        ) {
           throw new SuspiciousLinkProvidedError();
         }
 
@@ -20,9 +28,9 @@ export default new Elysia().group("/projects", (app) =>
         return await ProjectService.create({
           title,
           description,
-          href,
+          href: clearedHref,
           imageAlt,
-          imageUrl,
+          imageUrl: clearedImageUrl,
           canShowOnMain,
           lexorank: lexorank.toString(),
         });
@@ -63,7 +71,14 @@ export default new Elysia().group("/projects", (app) =>
         params: { projectId },
         body: { title, description, href, imageAlt, imageUrl, canShowOnMain },
       }) => {
-        if (isSuspiciousHref(href) || isSuspiciousHref(imageUrl)) {
+        const clearedHref = clearHref(href);
+        const clearedImageUrl = clearHref(imageUrl);
+        if (
+          !clearedHref ||
+          !clearedImageUrl ||
+          isSuspiciousHref(clearedHref) ||
+          isSuspiciousHref(clearedImageUrl)
+        ) {
           throw new SuspiciousLinkProvidedError();
         }
 
@@ -75,9 +90,9 @@ export default new Elysia().group("/projects", (app) =>
         const result = await ProjectService.update(projectId, {
           title,
           description,
-          href,
+          href: clearedHref,
           imageAlt,
-          imageUrl,
+          imageUrl: clearedImageUrl,
           canShowOnMain,
         });
         if (!result) {

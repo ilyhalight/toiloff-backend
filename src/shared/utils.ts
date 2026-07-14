@@ -12,3 +12,16 @@ export const randomInt = (min: number, max: number) =>
 
 export const insertAt = (text: string, index: number, value: string) =>
   text.slice(0, index) + value + text.slice(index);
+
+export function clearHref(href?: string | null): string | undefined {
+  if (!href) {
+    return undefined;
+  }
+
+  href = href.trim().replace(/\s+/g, "");
+  if (href === "") {
+    return undefined;
+  }
+
+  return href;
+}

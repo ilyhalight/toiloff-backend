@@ -11,7 +11,7 @@ generatedAt: 2026-07-12T23:20:28.352Z
 type: request-separator
 attrs:
   uid: 37c38178-760f-433e-9242-9f843b335a2a
-  colorIndex: 2
+  colorIndex: 7
   label: GET TOKEN
 ---
 ```
@@ -32,7 +32,7 @@ attrs:
 type: request-separator
 attrs:
   uid: 4981f1e7-aa07-4d5e-851b-999d5ad3dc7d
-  colorIndex: 9
+  colorIndex: 6
   label: CREATE PROJECT
 ---
 ```
@@ -115,6 +115,197 @@ attrs:
     {
       "id": "019f5890-2eb6-7a03-a537-9ba13b80ac5d",
       "title": "Yes cool",
+      "description": "a not cool desc",
+      "href": "https://github.com/ilyhalight/voice-over-translation",
+      "imageUrl": "https://github.com/ilyhalight/voice-over-translation/raw/master/img/example.png",
+      "imageAlt": "coolify image",
+      "canShowOnMain": true,
+      "lexorank": "0|000000:",
+      "createdAt": "2026-07-12T20:01:11.987Z",
+      "updatedAt": "2026-07-12T20:01:11.987Z"
+    }
+---
+```
+```void
+---
+type: request-separator
+attrs:
+  uid: 8b8b219f-7273-4600-b02c-dcb946a76cd1
+  colorIndex: 3
+  label: DELETE A PROJECT
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: 02c95ae4-ea5f-4e28-b219-613fa34f48d4
+content: Delete a project by id
+---
+```
+```void
+---
+type: request
+attrs:
+  uid: d065c131-b2d0-4551-a591-365b39b9b042
+content:
+  - type: method
+    attrs:
+      uid: 7ec516d7-eb1d-4485-b2df-ea2e365f4414
+      method: DELETE
+      importedFrom: ""
+      visible: true
+    content: DELETE
+  - type: url
+    attrs:
+      uid: c547c3d2-87ae-4fbd-9451-0780a7225c94
+    content: "{{API_HOST}}/v1/admin/projects/019f5890-2eb6-7a03-a537-9ba13b80ac5d"
+---
+```
+```void
+---
+type: headers-table
+attrs:
+  uid: 5ebd5946-77a8-40ab-88f8-2e1a50206f67
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - Cookie
+          - tf_auth_token={{process.auth_token}}
+          - null
+---
+```
+%%EMPTY_LINE%%
+
+```void
+---
+type: paragraph
+attrs:
+  uid: 1e833c6c-69b7-482c-be79-f9d659f2a440
+content: "Response example (deleted project data):"
+---
+```
+```void
+---
+type: codeBlock
+attrs:
+  uid: 901df63f-47e6-4889-816a-740a782c3b16
+  language: json
+  body: >-
+    {
+      "id": "019f5890-2eb6-7a03-a537-9ba13b80ac5d",
+      "title": "Yes cool",
+      "description": "a not cool desc",
+      "href": "https://github.com/ilyhalight/voice-over-translation",
+      "imageUrl": "https://github.com/ilyhalight/voice-over-translation/raw/master/img/example.png",
+      "imageAlt": "coolify image",
+      "canShowOnMain": true,
+      "lexorank": "0|000000:",
+      "createdAt": "2026-07-12T20:01:11.987Z",
+      "updatedAt": "2026-07-12T20:01:11.987Z"
+    }
+---
+```
+%%EMPTY_LINE%%
+
+```void
+---
+type: request-separator
+attrs:
+  uid: fc48ef7c-6c95-4a14-b33e-c9e1386c8615
+  colorIndex: 0
+  label: update project
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: 94ac9b4d-e735-4dda-b9e7-7d4169f656f3
+content: Update a project by id
+---
+```
+```void
+---
+type: request
+attrs:
+  uid: 80692ee0-7362-4bc5-8664-8101bf45a15d
+content:
+  - type: method
+    attrs:
+      uid: 9f38df67-0a50-4208-8be0-60cb52b008c9
+      method: PATCH
+      importedFrom: ""
+      visible: true
+    content: PATCH
+  - type: url
+    attrs:
+      uid: db2bcf06-e6eb-4830-b755-af3b6023c270
+    content: "{{API_HOST}}/v1/admin/projects/019f5890-2eb6-7a03-a537-9ba13b80ac5d"
+---
+```
+```void
+---
+type: headers-table
+attrs:
+  uid: 6914090b-f878-4ac6-ab13-22d2e2a4c97f
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - Cookie
+          - tf_auth_token={{process.auth_token}}
+          - null
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: 14caee11-665b-4f02-be49-7defa36333d2
+content: All fields is optional
+---
+```
+```void
+---
+type: json_body
+attrs:
+  uid: 4bbbe90f-ac5d-499f-86ce-41a7f40730b1
+  body: >-
+    {
+      "title": "Yes cool 3",
+      "description": "a not cool desc",
+      "href": "https://github.com/ilyhalight/voice-over-translation",
+      "imageUrl": "https://github.com/ilyhalight/voice-over-translation/raw/master/img/example.png",
+      "imageAlt": "coolify image"
+    }
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: b34e4710-3023-44d0-bb4d-df29254907bb
+content: "Response example:"
+---
+```
+```void
+---
+type: codeBlock
+attrs:
+  uid: ae061013-98e7-4637-adbb-c6df6b0b7bf4
+  language: json
+  body: >-
+    {
+      "id": "019f5890-2eb6-7a03-a537-9ba13b80ac5d",
+      "title": "Yes cool 3",
       "description": "a not cool desc",
       "href": "https://github.com/ilyhalight/voice-over-translation",
       "imageUrl": "https://github.com/ilyhalight/voice-over-translation/raw/master/img/example.png",

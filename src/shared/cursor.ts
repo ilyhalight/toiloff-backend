@@ -1,6 +1,7 @@
 import { CursorData } from "@/types/cursor";
 import { isUUIDv7 } from "./validator";
 import { t } from "elysia";
+import { LexoRank } from "lexorank";
 
 export const CursorNav = t.Object({
   nextCursor: t.Nullable(t.String()),
@@ -29,12 +30,16 @@ export const decodeCursor = <T extends unknown>(cursor?: string) => {
   }
 };
 
-export const calcCursor = <T extends CursorData>(items: T[], hasNextPage: boolean) => {
+export const calcCursor = <T extends CursorData>(
+  items: T[],
+  hasNextPage: boolean,
+  field: keyof T = "id",
+) => {
   if (!hasNextPage) {
     return null;
   }
 
-  const lastId = items[items.length - 1].id;
+  const lastId = items[items.length - 1][field];
   return encodeCursor({
     id: lastId,
   });
@@ -46,9 +51,23 @@ export const extractUUIDfromCursor = (cursor?: string) => {
   return isUUIDv7(cursorId) ? cursorId : undefined;
 };
 
-export const calcResult = <T extends CursorData[]>(rows: T) => {
+export const extractLexorankfromCursor = (cursor?: string) => {
+  const cursorData = decodeCursor<CursorData>(cursor);
+  const cursorId = cursorData?.id;
+  if (!cursorId) {
+    return undefined;
+  }
+
+  try {
+    return LexoRank.parse(cursorId)?.toString();
+  } catch {
+    return undefined;
+  }
+};
+
+export const calcResult = <T extends CursorData[]>(rows: T, field?: string) => {
   const hasNextPage = rows.length > DEFAULT_LIMIT;
   const items = (hasNextPage ? rows.slice(0, DEFAULT_LIMIT) : rows) as T;
-  const nextCursor = calcCursor(items, hasNextPage);
+  const nextCursor = calcCursor(items, hasNextPage, field as any);
   return { items, nextCursor, pageSize: items.length };
 };

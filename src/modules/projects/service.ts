@@ -4,7 +4,7 @@ import { log } from "@/logging";
 import { ProjectRepo } from "./repo";
 import { NewProject, Project, ProjectUpdate } from "./schema";
 import { CursorOpts } from "@/types/cursor";
-import { calcResult, DEFAULT_CURSOR_CACHE_TTL, extractUUIDfromCursor } from "@/shared/cursor";
+import { calcResult, DEFAULT_CURSOR_CACHE_TTL, extractLexorankfromCursor } from "@/shared/cursor";
 import { ProjectsWithNav } from "./model";
 
 export abstract class ProjectService {
@@ -31,8 +31,8 @@ export abstract class ProjectService {
 
   static async getAll({ cursor }: CursorOpts) {
     const version = await cache.getVersion(`${this.prefix}:version`);
-    const currentCursor = extractUUIDfromCursor(cursor);
-    const cursorKey = currentCursor ?? "initial";
+    const currentCursor = extractLexorankfromCursor(cursor);
+    const cursorKey = currentCursor ? cursor : "initial";
 
     const key = `${this.prefix}:v${version}:${cursorKey}`;
     const cached = await cache.get<ProjectsWithNav>(key);
@@ -45,7 +45,7 @@ export abstract class ProjectService {
       throw new Error("Failed to get projects");
     });
 
-    const result = calcResult(rows);
+    const result = calcResult(rows, "lexorank");
     await cache.set(key, result, DEFAULT_CURSOR_CACHE_TTL);
     return result;
   }
@@ -95,7 +95,10 @@ export abstract class ProjectService {
   }
 
   static async update(id: string, updateWith: ProjectUpdate) {
-    const result = await ProjectRepo.update(id, updateWith);
+    const result = await ProjectRepo.update(id, {
+      ...updateWith,
+      updatedAt: new Date().toISOString(),
+    });
     if (!result) {
       return result;
     }

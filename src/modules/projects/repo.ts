@@ -13,7 +13,7 @@ export abstract class ProjectRepo {
   static async getAll({ cursor }: CursorOpts) {
     let query = db.selectFrom("tf_projects");
     if (cursor) {
-      query = query.where("id", "<", cursor);
+      query = query.where("lexorank", ">", cursor);
     }
 
     return await query

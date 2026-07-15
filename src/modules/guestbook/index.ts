@@ -3,8 +3,8 @@ import { Elysia } from "elysia";
 import { GuestbookModel } from "./model";
 import { GuestMessageService } from "./service";
 import { captchaResolver } from "../captcha/resolver";
-import { saveAvatar } from "./avatar";
 import { validateGuestMessage } from "./validator";
+import { ImagesService } from "../images/service";
 
 export default new Elysia({
   detail: {
@@ -32,7 +32,7 @@ export default new Elysia({
         "/",
         async ({ body }) => {
           const { username, content, href, hrefText, avatar } = validateGuestMessage(body);
-          const avatarUrl = await saveAvatar(avatar);
+          const avatarUrl = avatar ? await ImagesService.saveAvatar(avatar) : undefined;
           const message = await GuestMessageService.create({
             username,
             content,

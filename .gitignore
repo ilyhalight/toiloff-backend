@@ -3,7 +3,7 @@
 # i don't want to share my lewds
 .env
 src/assets/bad-usernames.txt
-src/public/avatars
+src/public
 
 # docker
 /db

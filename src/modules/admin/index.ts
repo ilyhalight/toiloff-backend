@@ -4,6 +4,7 @@ import { authResolver } from "@/modules/auth/resolver";
 
 import guestbookAdmin from "@/modules/guestbook/admin";
 import projectsAdmin from "@/modules/projects/admin";
+import imagesAdmin from "@/modules/images/admin";
 import authAdmin from "@/modules/auth";
 
 export default new Elysia({
@@ -15,5 +16,7 @@ export default new Elysia({
     // without auth by default
     .use(authAdmin)
     // with required admin auth by default
-    .guard({}, (app) => app.resolve(authResolver).use(guestbookAdmin).use(projectsAdmin)),
+    .guard({}, (app) =>
+      app.resolve(authResolver).use(guestbookAdmin).use(projectsAdmin).use(imagesAdmin),
+    ),
 );

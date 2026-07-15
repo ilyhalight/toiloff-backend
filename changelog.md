@@ -1,3 +1,10 @@
+# 1.0.3
+
+- Added images admin module based on fs (upload / delete / list)
+- Guestbook upload avatar logic moved to ImagesService
+- Added auto create public folders
+- Removed `alwaysStatic` for production
+
 # 1.0.2
 
 - Added support of `AUTH_COOKIE_DOMAIN` env field

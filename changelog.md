@@ -1,3 +1,7 @@
+# 1.0.4
+
+- Fixed set `imageUrl` as `imageAlt` in `validateProject` validator (on create/update project)
+
 # 1.0.3
 
 - Added images admin module based on fs (upload / delete / list)

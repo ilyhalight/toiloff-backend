@@ -42,7 +42,7 @@ export const validateProject = ({
     title,
     description,
     href,
-    imageAlt: clearedImageUrl,
+    imageAlt,
     imageUrl: clearedImageUrl,
     canShowOnMain,
   };

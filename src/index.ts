@@ -20,6 +20,7 @@ import {
 import { InvalidCaptchaError } from "./modules/captcha/error";
 import { PasswordAuthFailedError, UnauthorizedError } from "./modules/auth/error";
 import { FieldEmptyError } from "./shared/error";
+import { ProjectNotFound } from "./modules/projects/error";
 
 const {
   server: { hostname, port },
@@ -72,6 +73,7 @@ const app = new Elysia({
   .error({
     BAD_USERNAME_PROVIDED: BadUsernameProvidedError,
     GUEST_MESSAGE_NOT_FOUND: GuestMessageNotFoundError,
+    PROJECT_NOT_FOUND: ProjectNotFound,
     INVALID_CAPTCHA: InvalidCaptchaError,
     SUSPICIOUS_LINK_PROVIDED: SuspiciousLinkProvidedError,
     NOT_AUTHORIZED: UnauthorizedError,
@@ -90,6 +92,7 @@ const app = new Elysia({
         set.status = httpStatus.HTTP_406_NOT_ACCEPTABLE;
         break;
       case "GUEST_MESSAGE_NOT_FOUND":
+      case "PROJECT_NOT_FOUND":
         set.status = httpStatus.HTTP_404_NOT_FOUND;
         break;
       case "INVALID_CAPTCHA":

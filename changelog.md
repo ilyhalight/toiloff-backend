@@ -1,3 +1,9 @@
+# 1.0.1
+
+- Fix inconsistence redis client usage
+- Added simple error handler for invalid id format in `projects/:projectId`
+- Added 404 status code for PROJECT_NOT_FOUND
+
 # 1.0.0
 
 First release of backend for my website. Trying to use modules architect, idk

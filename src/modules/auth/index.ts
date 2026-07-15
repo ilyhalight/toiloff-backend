@@ -8,8 +8,7 @@ import { authResolver } from "./resolver";
 import { captchaResolver } from "../captcha/resolver";
 
 const {
-  app: { domain },
-  auth: { lifetime: cookieMaxAge },
+  auth: { lifetime: cookieMaxAge, cookieDomain },
 } = config;
 
 export default new Elysia().group("/auth", (app) =>
@@ -21,12 +20,12 @@ export default new Elysia().group("/auth", (app) =>
           const { token, expiresAt } = await AuthService.createToken(username, password);
 
           tf_auth_token.set({
-            domain,
+            domain: cookieDomain,
             httpOnly: true,
             maxAge: cookieMaxAge,
             value: token,
-            secure: domain !== "localhost",
-            sameSite: domain === "localhost" ? "lax" : "strict",
+            secure: cookieDomain !== "localhost",
+            sameSite: cookieDomain === "localhost" ? "lax" : "strict",
           });
 
           return {

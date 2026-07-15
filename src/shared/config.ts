@@ -16,6 +16,7 @@ const GITHUB_URL = "https://github.com/ilyhalight/toiloff-backend";
 const DEFAULT_SERVICE_TOKEN = "LUMMPJfMLM_g=fQJTZet~3!htp4C!L]1";
 const DEFAULT_USERNAME = "root";
 const DEFAULT_PASSWORD = "root";
+const DEFAULT_DOMAIN = "localhost";
 const DEFAULT_AUTH_LIFETIME = 3600; // 1 hour
 export const BAD_USERNAMES_PREVIEW_URL = `${GITHUB_URL}/tree/master/src/assets/bad-usernames.example.txt`;
 
@@ -47,7 +48,7 @@ export const ConfigSchema = t.Object({
     }),
     scalarCDN: t.Literal(SCALAR_CDN, { readOnly: true, default: SCALAR_CDN }),
     publicPath: t.String(),
-    domain: t.String({ default: "localhost" }),
+    domain: t.String({ default: DEFAULT_DOMAIN }),
   }),
   cors: t.Object({
     allowedHeaders: t.String({ default: "*" }),
@@ -86,6 +87,7 @@ export const ConfigSchema = t.Object({
     secret: t.String({ default: "doesnttrustit" }),
     lifetime: t.Number({ default: DEFAULT_AUTH_LIFETIME }),
     algo: t.Literal("HS256", { default: "HS256" }),
+    cookieDomain: t.String({ default: DEFAULT_DOMAIN }),
   }),
 });
 
@@ -133,5 +135,6 @@ export default Value.Parse(ConfigSchema, {
     username: Bun.env.AUTH_USERNAME,
     password: await Bun.password.hash(Bun.env.AUTH_PASSWORD || DEFAULT_PASSWORD),
     secret: Bun.env.AUTH_SECRET,
+    cookieDomain: Bun.env.AUTH_COOKIE_DOMAIN,
   },
 } as const satisfies DeepPartial<ConfigSchemaType>);

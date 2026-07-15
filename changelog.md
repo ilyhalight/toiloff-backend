@@ -1,3 +1,7 @@
+# 1.0.2
+
+- Added support of `AUTH_COOKIE_DOMAIN` env field
+
 # 1.0.1
 
 - Fix inconsistence redis client usage

@@ -1,3 +1,6 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+
 import { Elysia } from "elysia";
 import openapi, { ElysiaOpenAPIConfig } from "@elysia/openapi";
 import { HttpStatusCode } from "elysia-http-status-code";
@@ -21,6 +24,7 @@ import { InvalidCaptchaError } from "./modules/captcha/error";
 import { PasswordAuthFailedError, UnauthorizedError } from "./modules/auth/error";
 import { FieldEmptyError } from "./shared/error";
 import { ProjectNotFound } from "./modules/projects/error";
+import { AVATARS_IMAGE_FOLDER, DEFAULT_IMAGE_FODLER } from "./modules/images/service";
 
 const {
   server: { hostname, port },
@@ -50,6 +54,15 @@ if (domain !== "localhost") {
   ];
 }
 
+const PUBLIC_DIRS = [AVATARS_IMAGE_FOLDER, DEFAULT_IMAGE_FODLER];
+await Promise.all(
+  PUBLIC_DIRS.map(async (dir) => {
+    await fs.mkdir(path.join(publicPath, dir), {
+      recursive: true,
+    });
+  }),
+);
+
 const app = new Elysia({
   prefix: "/v1",
 })
@@ -66,6 +79,7 @@ const app = new Elysia({
     staticPlugin({
       assets: publicPath,
       prefix: "/public",
+      alwaysStatic: false,
     }),
   )
   .use(HttpStatusCode())

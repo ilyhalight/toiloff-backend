@@ -35,10 +35,10 @@ AUTH_SERVICE_TOKEN=your_secret_token
 3. Build the image
 
 ```bash
-docker build -t "tf-backend" .
+docker compose build
 ```
 
-3. Run with docker-compose
+3. Run with docker compose
 
 ```bash
 docker compose up -d

@@ -6,6 +6,7 @@ import { NewProject, Project, ProjectUpdate } from "./schema";
 import { CursorOpts } from "@/types/cursor";
 import { calcResult, DEFAULT_CURSOR_CACHE_TTL, extractLexorankfromCursor } from "@/shared/cursor";
 import { ProjectsWithNav } from "./model";
+import { ProjectNotFound } from "./error";
 
 export abstract class ProjectService {
   static prefix = "projects";
@@ -72,7 +73,9 @@ export abstract class ProjectService {
       return cached;
     }
 
-    const result = await ProjectRepo.get(id);
+    const result = await ProjectRepo.get(id).catch(() => {
+      throw new ProjectNotFound();
+    });
     if (!result) {
       return result;
     }

@@ -65,6 +65,7 @@ services:
       TELEGRAM_API_HASH:
       TELEGRAM_BOT_TOKEN:
       TELEGRAM_OWNER_ID:
+      REDIS_HOST: tf-valkey
     volumes:
       - ./bot-data:/app/bot-data
     depends_on:

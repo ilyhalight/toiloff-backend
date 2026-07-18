@@ -1,22 +1,24 @@
-import { Kysely, PostgresDialect } from "kysely";
-
-import { Pool } from "pg";
+import { Kysely } from "kysely";
+import { PostgresJSDialect } from "kysely-postgres-js";
 
 import { Database } from "@/types/db";
 import config from "./config";
+import { SQL } from "bun";
 
 const {
-  db: { name, host, port, user, password },
+  db: { name, host, port, user: username, password },
 } = config;
 
-const dialect = new PostgresDialect({
-  pool: new Pool({
-    database: name,
-    host,
-    user,
-    port,
-    password,
+const dialect = new PostgresJSDialect({
+  postgres: new SQL({
+    // pool
     max: 10,
+    // auth
+    database: name,
+    username,
+    host,
+    password,
+    port,
   }),
 });
 

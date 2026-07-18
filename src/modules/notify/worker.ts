@@ -22,6 +22,7 @@ const eventMap: Record<EventType, (payload: any) => Promise<void>> = {
 };
 
 // i guess, we doesn't need a extra client for subscribe, because we are running it as a separate process
+client.onconnect = () => console.log("Connected to redis for notify worker");
 await client.subscribe("notify_events", async (message) => {
   const event: NotifyEvent = JSON.parse(message);
   const handler = eventMap[event.eventType];

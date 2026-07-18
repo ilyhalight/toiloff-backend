@@ -10,7 +10,7 @@ export type NotifyEvent<T = unknown> = {
 
 export abstract class NotifyService {
   static async send<T>(event: NotifyEvent<T>) {
-    if (config.notify.enabled === false) {
+    if (!config.notify.enabled) {
       return 0;
     }
 

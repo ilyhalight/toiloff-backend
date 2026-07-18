@@ -49,6 +49,28 @@ services:
         condition: service_healthy
     restart: "no"
 
+  tf-notify-worker:
+    build:
+      context: .
+      target: notify-worker
+    container_name: tf-notify-worker
+    restart: always
+    networks:
+      - tf-net
+    environment:
+      # any values for captcha env. only to skip config parse
+      CAPTCHA_SIGNATURE: your_captcha_signature
+      CAPTCHA_KEY_SIGNATURE: your_captcha_key_signature
+      TELEGRAM_API_ID:
+      TELEGRAM_API_HASH:
+      TELEGRAM_BOT_TOKEN:
+      TELEGRAM_OWNER_ID:
+    volumes:
+      - ./bot-data:/app/bot-data
+    depends_on:
+      tf-valkey:
+        condition: service_healthy
+
   tf-backend:
     build:
       context: .

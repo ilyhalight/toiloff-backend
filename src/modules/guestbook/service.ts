@@ -5,6 +5,8 @@ import { calcResult, DEFAULT_CURSOR_CACHE_TTL, extractUUIDfromCursor } from "@/s
 import { log } from "@/logging";
 import { GuestMessageNotFoundError } from "./error";
 import { NewGuestMessage } from "./schema";
+import { NotifyService } from "@/modules/notify/service";
+import { NewGuestMessageNotify } from "@/modules/notify/types";
 
 export abstract class GuestMessageService {
   static prefix = "guest_messages";
@@ -33,6 +35,14 @@ export abstract class GuestMessageService {
     await cache.incrVersion(`${this.prefix}:review:version`);
     await cache.incrVersion(`${this.prefix}:all:version`);
     await cache.del(`${this.prefix}:stats`);
+    await NotifyService.send<NewGuestMessageNotify>({
+      eventType: "new_guest_message",
+      payload: {
+        username: result.username,
+        content: result.content,
+        href: result.href,
+      },
+    });
     return result;
   }
 

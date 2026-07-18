@@ -5,6 +5,8 @@
 src/assets/bad-usernames.txt
 src/public
 
+bot-data/session*
+
 # docker
 /db
 /valkey

@@ -61,6 +61,12 @@ bun install
 bun migrate
 ```
 
+5. Run notify worker (if you want to enable telegram bot notify)
+
+```bash
+bun worker:notify
+```
+
 6. Run server
 
 ```bash

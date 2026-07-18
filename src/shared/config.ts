@@ -89,6 +89,9 @@ export const ConfigSchema = t.Object({
     algo: t.Literal("HS256", { default: "HS256" }),
     cookieDomain: t.String({ default: DEFAULT_DOMAIN }),
   }),
+  notify: t.Object({
+    enabled: t.Boolean({ default: true }),
+  }),
 });
 
 export type ConfigSchemaType = Static<typeof ConfigSchema>;
@@ -136,5 +139,9 @@ export default Value.Parse(ConfigSchema, {
     password: await Bun.password.hash(Bun.env.AUTH_PASSWORD || DEFAULT_PASSWORD),
     secret: Bun.env.AUTH_SECRET,
     cookieDomain: Bun.env.AUTH_COOKIE_DOMAIN,
+  },
+  notify: {
+    // skip pub/sub notify events if disabled
+    enabled: Bun.env.NOTIFY_ENABLED !== "false",
   },
 } as const satisfies DeepPartial<ConfigSchemaType>);

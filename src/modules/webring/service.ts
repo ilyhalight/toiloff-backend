@@ -24,7 +24,11 @@ export abstract class WebringService {
     };
   }
 
-  private static getFaviconUrl(favicon: string) {
+  private static getFaviconUrl(favicon: string | undefined) {
+    if (!favicon) {
+      return undefined;
+    }
+
     return `${WebringService.BASE_URL}/media/${favicon}`;
   }
 
@@ -66,8 +70,8 @@ export abstract class WebringService {
 
         const {
           data: {
-            prev: { favicon: prevFavicon, url: prevUrl },
-            next: { favicon: nextFavicon, url: nextUrl },
+            prev: { favicon: prevFavicon, url: prevUrl, name: prevName },
+            next: { favicon: nextFavicon, url: nextUrl, name: nextName },
           },
         } = result;
 
@@ -75,12 +79,14 @@ export abstract class WebringService {
           prev: {
             favicon: this.getFaviconUrl(prevFavicon),
             url: prevUrl,
+            name: prevName,
           },
           random: this.RANDOM_URL,
           info: this.INFO_URL,
           next: {
             favicon: this.getFaviconUrl(nextFavicon),
             url: nextUrl,
+            name: nextName,
           },
         };
       },

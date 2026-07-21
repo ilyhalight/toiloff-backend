@@ -3,7 +3,7 @@ export type SiteData = {
   slug: string;
   name: string;
   url: string;
-  favicon: string;
+  favicon?: string;
 };
 
 export type GetDataResponse = {

@@ -1,8 +1,9 @@
 import { t } from "elysia";
 
 export const WebringSiteItem = t.Object({
-  favicon: t.String(),
+  favicon: t.Union([t.String(), t.Undefined()]),
   url: t.String(),
+  name: t.String(),
 });
 
 export const WebringData = t.Object({

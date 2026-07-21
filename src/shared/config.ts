@@ -92,6 +92,11 @@ export const ConfigSchema = t.Object({
   notify: t.Object({
     enabled: t.Boolean({ default: true }),
   }),
+  webring: t.Object({
+    enabled: t.Boolean({ default: false }),
+    domain: t.String({ default: "webring.otomir23.me" }),
+    slug: t.String({ default: "toil" }),
+  }),
 });
 
 export type ConfigSchemaType = Static<typeof ConfigSchema>;
@@ -143,5 +148,10 @@ export default Value.Parse(ConfigSchema, {
   notify: {
     // skip pub/sub notify events if disabled
     enabled: Bun.env.NOTIFY_ENABLED !== "false",
+  },
+  webring: {
+    enabled: Bun.env.WEBRING_ENABLED !== "false",
+    domain: Bun.env.WEBRING_DOMAIN,
+    slug: Bun.env.WEBRING_SLUG,
   },
 } as const satisfies DeepPartial<ConfigSchemaType>);

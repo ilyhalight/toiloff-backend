@@ -6,6 +6,7 @@ import guestbookAdmin from "@/modules/guestbook/admin";
 import projectsAdmin from "@/modules/projects/admin";
 import imagesAdmin from "@/modules/images/admin";
 import authAdmin from "@/modules/auth";
+import webringAdmin from "@/modules/webring/admin";
 
 export default new Elysia({
   detail: {
@@ -17,6 +18,11 @@ export default new Elysia({
     .use(authAdmin)
     // with required admin auth by default
     .guard({}, (app) =>
-      app.resolve(authResolver).use(guestbookAdmin).use(projectsAdmin).use(imagesAdmin),
+      app
+        .resolve(authResolver)
+        .use(guestbookAdmin)
+        .use(projectsAdmin)
+        .use(imagesAdmin)
+        .use(webringAdmin),
     ),
 );

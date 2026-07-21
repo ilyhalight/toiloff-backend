@@ -1,3 +1,7 @@
+# 1.0.6
+
+- Added webring module
+
 # 1.0.5
 
 - Added notify module with telegram bot support
@@ -5,7 +9,7 @@
 To enable it, you need:
 
 1. create a bot via [@BotFather](https://t.me/BotFather)
-2. get `API_ID` and `API_HASH` at ([telegram apps](https://my.telegram.org/apps))
+2. get `API_ID` and `API_HASH` at [telegram apps](https://my.telegram.org/apps)
 3. set the following env variables:
 
 ```bash

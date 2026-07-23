@@ -1,3 +1,7 @@
+# 1.0.7
+
+- Fixed webring empty favicon
+
 # 1.0.6
 
 - Added webring module

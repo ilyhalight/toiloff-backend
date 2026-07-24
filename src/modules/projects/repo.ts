@@ -19,6 +19,7 @@ export abstract class ProjectRepo {
     return await query
       .selectAll()
       .orderBy("lexorank", "asc")
+      .orderBy("id", "asc")
       .limit(DEFAULT_LIMIT + 1)
       .execute();
   }
@@ -29,6 +30,7 @@ export abstract class ProjectRepo {
       .where("canShowOnMain", "=", true)
       .selectAll()
       .orderBy("lexorank", "asc")
+      .orderBy("id", "asc")
       .limit(MAIN_PAGE_LIMIT)
       .execute();
   }
@@ -38,6 +40,7 @@ export abstract class ProjectRepo {
       .selectFrom("tf_projects")
       .select("lexorank")
       .orderBy("lexorank", "desc")
+      .orderBy("id", "asc")
       .limit(1)
       .executeTakeFirst();
 
@@ -46,6 +49,16 @@ export abstract class ProjectRepo {
 
   static async get(id: string) {
     return db.selectFrom("tf_projects").where("id", "=", id).selectAll().executeTakeFirst();
+  }
+
+  static async getNearestLexo(afterId: string | null, beforeId: string | null) {
+    return db
+      .selectFrom("tf_projects")
+      .select(({ selectFrom }) => [
+        selectFrom("tf_projects").select("lexorank").where("id", "=", afterId).as("after"),
+        selectFrom("tf_projects").select("lexorank").where("id", "=", beforeId).as("before"),
+      ])
+      .executeTakeFirst();
   }
 
   static async delete(id: string) {

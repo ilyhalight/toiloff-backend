@@ -1,6 +1,6 @@
 {
   "name": "toiloff-backend",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/**/*.ts --watch src/assets/*.txt",
@@ -17,17 +17,17 @@
     "@elysia/static": "^1.4.11",
     "@mtcute/bun": "^0.31.0",
     "@mtcute/html-parser": "^0.31.0",
-    "altcha-lib": "^2.2.0",
+    "altcha-lib": "^2.3.1",
     "elysia": "latest",
     "elysia-http-status-code": "^1.0.9",
-    "jose": "^6.2.3",
-    "kysely": "^0.29.2",
+    "jose": "^6.2.4",
+    "kysely": "^0.29.4",
     "kysely-postgres-js": "^3.0.0",
     "lexorank": "^1.0.5"
   },
   "type": "module",
   "devDependencies": {
-    "@sinclair/typebox": "^0.34.49",
+    "@sinclair/typebox": "^0.34.52",
     "@types/pg": "^8.20.0",
     "bun-types": "latest"
   },

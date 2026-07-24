@@ -12,8 +12,13 @@ export const cache = {
   async getVersion(key: string) {
     return (await client.get(key)) ?? "0";
   },
+
   async incrVersion(key: string) {
     return await client.incr(key);
+  },
+
+  async has(key: string): Promise<boolean> {
+    return await client.exists(key);
   },
 
   async get<T>(key: string): Promise<undefined | T> {

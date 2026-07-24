@@ -2,8 +2,9 @@ import { Elysia } from "elysia";
 import { ProjectModel } from "./model";
 import { ProjectService } from "./service";
 import { LexoRank } from "lexorank";
-import { ProjectNotFound } from "./error";
+import { ProjectInvalidPosition, ProjectNotFound } from "./error";
 import { validateProject } from "./validator";
+import { calcBeetweenLexo } from "@/shared/lexo";
 
 export default new Elysia().group("/projects", (app) =>
   app
@@ -72,6 +73,44 @@ export default new Elysia().group("/projects", (app) =>
         },
         detail: {
           summary: "Update a project",
+        },
+      },
+    )
+    .patch(
+      "/:projectId/position",
+      async ({ params: { projectId }, body: { afterId, beforeId } }) => {
+        if (afterId === beforeId) {
+          throw new ProjectInvalidPosition();
+        }
+
+        const project = await ProjectService.get(projectId);
+        if (!project) {
+          throw new ProjectNotFound();
+        }
+
+        const lexo = await ProjectService.getNearestLexo(afterId, beforeId);
+        if (!lexo) {
+          throw new ProjectInvalidPosition();
+        }
+
+        const nextLexo = calcBeetweenLexo(lexo.after, lexo.before);
+        const result = await ProjectService.update(projectId, {
+          lexorank: nextLexo,
+        });
+        if (!result) {
+          throw new ProjectNotFound();
+        }
+
+        return result;
+      },
+      {
+        params: ProjectModel.updateParam,
+        body: ProjectModel.updatePositionBody,
+        response: {
+          200: ProjectModel.updateResponse,
+        },
+        detail: {
+          summary: "Update a project position",
         },
       },
     ),

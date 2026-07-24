@@ -1,6 +1,8 @@
 # 1.0.7
 
-- Fixed webring empty favicon
+- Added support change project position by after + before ids
+- Fixed webring empty favicon type
+- Bump depends
 
 # 1.0.6
 

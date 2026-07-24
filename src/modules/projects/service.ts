@@ -97,6 +97,26 @@ export abstract class ProjectService {
     return result;
   }
 
+  static async getNearestLexo(afterId: string | null, beforeId: string | null) {
+    const hasCachedData =
+      (await cache.has(`${this.prefix}:${afterId}`)) &&
+      (await cache.has(`${this.prefix}:${beforeId}`));
+    if (!hasCachedData) {
+      return await ProjectRepo.getNearestLexo(afterId, beforeId);
+    }
+
+    const after = await cache.get<Project>(`${this.prefix}:${afterId}`);
+    const before = await cache.get<Project>(`${this.prefix}:${beforeId}`);
+    if (!after && !before) {
+      return await ProjectRepo.getNearestLexo(afterId, beforeId);
+    }
+
+    return {
+      after: after?.lexorank ?? null,
+      before: before?.lexorank ?? null,
+    };
+  }
+
   static async update(id: string, updateWith: ProjectUpdate) {
     const result = await ProjectRepo.update(id, {
       ...updateWith,

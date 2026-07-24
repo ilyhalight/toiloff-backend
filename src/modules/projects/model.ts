@@ -24,6 +24,11 @@ export const ProjectParam = t.Object({
   projectId: t.String(),
 });
 
+export const ProjectPosition = t.Object({
+  afterId: t.Nullable(t.String()),
+  beforeId: t.Nullable(t.String()),
+});
+
 export const ProjectModel = {
   getAllResponse: ProjectsWithNav,
   getAllQuery: CursorQuery,
@@ -37,4 +42,5 @@ export const ProjectModel = {
   updateParam: ProjectParam,
   updateBody: CreateProject,
   updateResponse: Project,
+  updatePositionBody: ProjectPosition,
 };

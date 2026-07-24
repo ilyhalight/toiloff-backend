@@ -24,7 +24,7 @@ import {
 import { InvalidCaptchaError } from "./modules/captcha/error";
 import { PasswordAuthFailedError, UnauthorizedError } from "./modules/auth/error";
 import { FieldEmptyError } from "./shared/error";
-import { ProjectNotFound } from "./modules/projects/error";
+import { ProjectInvalidPosition, ProjectNotFound } from "./modules/projects/error";
 import { AVATARS_IMAGE_FOLDER, DEFAULT_IMAGE_FODLER } from "./modules/images/service";
 
 const {
@@ -94,6 +94,7 @@ const app = new Elysia({
     NOT_AUTHORIZED: UnauthorizedError,
     INVALID_CREDENTIALS: PasswordAuthFailedError,
     FIELD_EMPTY: FieldEmptyError,
+    PROJECT_INVALID_POSITION: ProjectInvalidPosition,
   })
   .onError(({ code, error, set, httpStatus }) => {
     switch (code) {
@@ -104,6 +105,7 @@ const app = new Elysia({
       case "VALIDATION":
         return error.all;
       case "BAD_USERNAME_PROVIDED":
+      case "PROJECT_INVALID_POSITION":
         set.status = httpStatus.HTTP_406_NOT_ACCEPTABLE;
         break;
       case "GUEST_MESSAGE_NOT_FOUND":

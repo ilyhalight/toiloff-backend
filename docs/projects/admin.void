@@ -11,7 +11,7 @@ generatedAt: 2026-07-12T23:20:28.352Z
 type: request-separator
 attrs:
   uid: 37c38178-760f-433e-9242-9f843b335a2a
-  colorIndex: 7
+  colorIndex: 5
   label: GET TOKEN
 ---
 ```
@@ -32,7 +32,7 @@ attrs:
 type: request-separator
 attrs:
   uid: 4981f1e7-aa07-4d5e-851b-999d5ad3dc7d
-  colorIndex: 6
+  colorIndex: 0
   label: CREATE PROJECT
 ---
 ```
@@ -131,7 +131,7 @@ attrs:
 type: request-separator
 attrs:
   uid: 8b8b219f-7273-4600-b02c-dcb946a76cd1
-  colorIndex: 3
+  colorIndex: 2
   label: DELETE A PROJECT
 ---
 ```
@@ -217,7 +217,7 @@ attrs:
 type: request-separator
 attrs:
   uid: fc48ef7c-6c95-4a14-b33e-c9e1386c8615
-  colorIndex: 0
+  colorIndex: 7
   label: update project
 ---
 ```
@@ -305,6 +305,111 @@ attrs:
   body: >-
     {
       "id": "019f5890-2eb6-7a03-a537-9ba13b80ac5d",
+      "title": "Yes cool 3",
+      "description": "a not cool desc",
+      "href": "https://github.com/ilyhalight/voice-over-translation",
+      "imageUrl": "https://github.com/ilyhalight/voice-over-translation/raw/master/img/example.png",
+      "imageAlt": "coolify image",
+      "canShowOnMain": true,
+      "lexorank": "0|000000:",
+      "createdAt": "2026-07-12T20:01:11.987Z",
+      "updatedAt": "2026-07-12T20:01:11.987Z"
+    }
+---
+```
+%%EMPTY_LINE%%
+
+```void
+---
+type: request-separator
+attrs:
+  uid: 5b8af663-e490-4621-908b-f99d036063db
+  colorIndex: 5
+  label: UPDATE PROJECT POSITION
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: dd25c276-f031-4677-82db-57f05225a330
+content: Update a project position by after id and before id
+---
+```
+```void
+---
+type: request
+attrs:
+  uid: 1ff1e2b9-1d95-4839-ad8b-83148eef9f1a
+content:
+  - type: method
+    attrs:
+      uid: 0749b498-fddd-4608-b366-34f7c2cc85ca
+      method: PATCH
+      importedFrom: ""
+      visible: true
+    content: PATCH
+  - type: url
+    attrs:
+      uid: 73642573-69cb-4fe5-990f-a0cdeb35f87b
+    content: "{{API_HOST}}/v1/admin/projects/019f9112-495d-7569-b558-449b578b168d/p\
+      osition"
+---
+```
+```void
+---
+type: headers-table
+attrs:
+  uid: cfe0dce5-2ed4-4efa-a84e-8b89f0d80b39
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - Cookie
+          - tf_auth_token={{process.auth_token}}
+          - null
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: c19b78f5-8dc1-4be0-83c8-db9341e564cc
+content: All fields is optional
+---
+```
+```void
+---
+type: json_body
+attrs:
+  uid: 904a32b0-3bbb-4dd4-8d51-1b80d8a517bc
+  body: |-
+    {
+      "beforeId": "019f6bb7-db30-7af0-b2e6-28e4b74c9684",
+      "afterId": "019f5890-2eb6-7a03-a537-9ba13b80ac5d"
+    }
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: d1ec6ddb-7a97-4a9b-a4fa-333b9e35c034
+content: "Response example:"
+---
+```
+```void
+---
+type: codeBlock
+attrs:
+  uid: 67042e77-a2eb-4a03-9f71-35ebf47fe1f2
+  language: json
+  body: >-
+    {
+      "id": "019f9112-495d-7569-b558-449b578b168d",
       "title": "Yes cool 3",
       "description": "a not cool desc",
       "href": "https://github.com/ilyhalight/voice-over-translation",

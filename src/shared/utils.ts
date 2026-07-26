@@ -26,4 +26,10 @@ export function clearHref(href?: string | null): string | undefined {
   return href;
 }
 
-export const clearText = (text: string) => text.trim().replace(/\s+/g, " ");
+export const clearText = (text: string) =>
+  text
+    .trim()
+    .normalize("NFD")
+    .replace(/\p{M}+/gu, "")
+    .replace(/\s+/g, " ")
+    .replaceAll("‮", "");

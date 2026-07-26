@@ -7,7 +7,7 @@ export type GuestMessageTable = {
   content: string;
   status: Generated<GuestMessageStatus>;
   href?: string | null;
-  hrefText?: string | null;
+  subText?: string | null;
   avatarUrl?: string | null;
   replyText?: string | null;
   createdAt: Generated<Date>;

@@ -31,13 +31,13 @@ export default new Elysia({
       app.resolve(captchaResolver).post(
         "/",
         async ({ body }) => {
-          const { username, content, href, hrefText, avatar } = validateGuestMessage(body);
+          const { username, content, href, subText, avatar } = validateGuestMessage(body);
           const avatarUrl = avatar ? await ImagesService.saveAvatar(avatar) : undefined;
           const message = await GuestMessageService.create({
             username,
             content,
             href,
-            hrefText,
+            subText,
             avatarUrl,
           });
 

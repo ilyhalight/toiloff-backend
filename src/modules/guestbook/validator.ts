@@ -14,7 +14,7 @@ export const validateGuestMessage = ({
   username,
   content,
   href,
-  hrefText,
+  subText,
   avatar,
 }: CreateMessageBody) => {
   username = clearText(username);
@@ -33,8 +33,8 @@ export const validateGuestMessage = ({
     throw new SuspiciousLinkProvidedError();
   }
 
-  if (hrefText) {
-    hrefText = clearText(hrefText) ?? undefined;
+  if (subText) {
+    subText = clearText(subText) ?? undefined;
   }
 
   content = clearText(content);
@@ -46,7 +46,7 @@ export const validateGuestMessage = ({
     username,
     content,
     href,
-    hrefText,
+    subText,
     avatar,
   };
 };

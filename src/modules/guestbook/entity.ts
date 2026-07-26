@@ -26,7 +26,7 @@ export const GuestMessage = t.Object(
         }),
       ),
     ),
-    hrefText: t.Optional(
+    subText: t.Optional(
       t.Nullable(
         t.String({
           maxLength: 32,

@@ -240,7 +240,7 @@ attrs:
           "content": "hello223",
           "status": "public",
           "href": null,
-          "hrefText": null,
+          "subText": null,
           "avatarUrl": null,
           "replyText": null,
           "createdAt": "2026-07-06T15:57:32.905Z",

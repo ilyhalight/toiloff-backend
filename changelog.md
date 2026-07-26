@@ -1,3 +1,9 @@
+# 1.0.8
+
+- Field `hrefText` in guestbook message replaced with `subText`
+- Added clearing bad unicode symbols in `clearText` func
+- Added log errors
+
 # 1.0.7
 
 - Added support change project position by after + before ids

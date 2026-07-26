@@ -26,6 +26,7 @@ import { PasswordAuthFailedError, UnauthorizedError } from "./modules/auth/error
 import { FieldEmptyError } from "./shared/error";
 import { ProjectInvalidPosition, ProjectNotFound } from "./modules/projects/error";
 import { AVATARS_IMAGE_FOLDER, DEFAULT_IMAGE_FODLER } from "./modules/images/service";
+import { log } from "./logging";
 
 const {
   server: { hostname, port },
@@ -124,9 +125,11 @@ const app = new Elysia({
         set.status = httpStatus.HTTP_422_UNPROCESSABLE_ENTITY;
         break;
     }
+    const message = (error as Error).message;
+    log.error(`[${code}] ${message}`);
 
     return {
-      error: (error as Error).message,
+      error: message,
     };
   })
   .use(captcha)

@@ -1,3 +1,7 @@
+# 1.0.9
+
+- Added `/health` endpoint
+
 # 1.0.8
 
 - Field `hrefText` in guestbook message replaced with `subText`

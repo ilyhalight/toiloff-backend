@@ -15,6 +15,7 @@ import stats from "./modules/stats";
 import projects from "./modules/projects";
 import funny from "./modules/funny";
 import webring from "./modules/webring";
+import health from "./modules/health";
 
 import {
   BadUsernameProvidedError,
@@ -139,6 +140,7 @@ const app = new Elysia({
   .use(projects)
   .use(funny)
   .use(webring)
+  .use(health)
   .listen({
     hostname,
     port,

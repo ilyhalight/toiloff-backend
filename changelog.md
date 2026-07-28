@@ -1,3 +1,7 @@
+# 1.0.10
+
+- Added cache webring down response for 5 minutes
+
 # 1.0.9
 
 - Added `/health` endpoint

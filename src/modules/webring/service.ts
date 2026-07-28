@@ -9,6 +9,18 @@ import { returnError } from "@/shared/error";
 
 const { webring } = config;
 
+type WebringDataSuccess = {
+  status: true;
+  data: WebringData;
+};
+
+type WebringDataError = {
+  status: false;
+  data: null;
+};
+
+type WebringDataResponse = WebringDataSuccess | WebringDataError;
+
 export abstract class WebringService {
   private static BASE_URL = `https://${webring.domain}`;
   private static INFO_URL = WebringService.BASE_URL;
@@ -16,6 +28,7 @@ export abstract class WebringService {
   private static RANDOM_URL = `${WebringService.MY_SLUG_HOST}/random`;
   private static USER_AGENT = `${packageInfo.name}/${packageInfo.version} (+${config.app.domain})`;
   private static CACHE_TTL = 60 * 60 * 24; // 24h
+  private static CACHE_TTL_DOWN = 60 * 5; // 5 minutes
   private static FETCH_TIMEOUT = 5_000; // 5 seconds
 
   private static get headers(): HeadersInit {
@@ -55,17 +68,26 @@ export abstract class WebringService {
     }
   }
 
+  static isDown(data: WebringDataResponse): data is WebringDataError {
+    return !data.status;
+  }
+
   static async get(): Promise<WebringData> {
     if (!config.webring.enabled) {
       throw new WebringDisabledError();
     }
 
-    return await cache.remember(
+    const data = await cache.remember(
       "webring:data",
       async () => {
         const result = await WebringService.getData();
         if (!result.status) {
-          throw new WebringServiceDownError();
+          const res: WebringDataError = {
+            status: false,
+            data: null,
+          };
+          await cache.set("webring:data", res, WebringService.CACHE_TTL_DOWN);
+          return res;
         }
 
         const {
@@ -75,7 +97,7 @@ export abstract class WebringService {
           },
         } = result;
 
-        return {
+        const data: WebringData = {
           prev: {
             favicon: this.getFaviconUrl(prevFavicon),
             url: prevUrl,
@@ -89,9 +111,19 @@ export abstract class WebringService {
             name: nextName,
           },
         };
+
+        return {
+          status: true,
+          data,
+        } satisfies WebringDataSuccess;
       },
       WebringService.CACHE_TTL,
     );
+    if (this.isDown(data)) {
+      throw new WebringServiceDownError();
+    }
+
+    return data.data;
   }
 
   static async clearCache(): Promise<true> {

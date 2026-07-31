@@ -27,8 +27,7 @@ export abstract class WebringService {
   private static MY_SLUG_HOST = `${WebringService.BASE_URL}/${webring.slug}`;
   private static RANDOM_URL = `${WebringService.MY_SLUG_HOST}/random`;
   private static USER_AGENT = `${packageInfo.name}/${packageInfo.version} (+${config.app.domain})`;
-  private static CACHE_TTL = 60 * 60 * 24; // 24h
-  private static CACHE_TTL_DOWN = 60 * 5; // 5 minutes
+  private static CACHE_TTL = 60 * 5; // 5 minutes
   private static FETCH_TIMEOUT = 5_000; // 5 seconds
 
   private static get headers(): HeadersInit {
@@ -86,7 +85,7 @@ export abstract class WebringService {
             status: false,
             data: null,
           };
-          await cache.set("webring:data", res, WebringService.CACHE_TTL_DOWN);
+          await cache.set("webring:data", res, WebringService.CACHE_TTL);
           return res;
         }
 

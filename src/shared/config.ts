@@ -68,8 +68,8 @@ export const ConfigSchema = t.Object({
     port: t.Number(),
     username: t.String({ default: "default" }),
     password: t.String({ default: "" }),
-    prefix: t.String({ default: "tfb" }), // Only for DB caching.
-    ttl: t.Number(), // Only for DB caching.
+    prefix: t.String({ default: "tfb" }),
+    ttl: t.Number(), // Only for DB caching
   }),
   assets: t.Object({
     badUsernames: t.Array(t.String()),

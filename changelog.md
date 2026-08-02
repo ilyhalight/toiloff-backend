@@ -1,3 +1,7 @@
+# 1.0.11
+
+- Added `graceCache` implementation for webring data caching
+
 # 1.0.10
 
 - Added cache webring down response for 5 minutes

@@ -17,10 +17,10 @@
     "@elysia/static": "^1.4.11",
     "@mtcute/bun": "^0.31.0",
     "@mtcute/html-parser": "^0.31.0",
-    "altcha-lib": "^2.3.1",
+    "altcha-lib": "^2.3.2",
     "elysia": "latest",
     "elysia-http-status-code": "^1.0.9",
-    "jose": "^6.2.4",
+    "jose": "^6.2.7",
     "kysely": "^0.29.4",
     "kysely-postgres-js": "^3.0.0",
     "lexorank": "^1.0.5"
@@ -28,7 +28,6 @@
   "type": "module",
   "devDependencies": {
     "@sinclair/typebox": "^0.34.52",
-    "@types/pg": "^8.20.0",
     "bun-types": "latest"
   },
   "module": "src/index.js"

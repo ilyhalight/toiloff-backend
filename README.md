@@ -95,7 +95,7 @@ Current planned roadmap with new features and other:
 
 - [x] Implement project module
 - [ ] Implement logging with pino
-- [ ] Implement easy projects sorting with lexorank
-- [ ] Telegram notify on create new guest message
+- [x] Implement easy projects sorting with lexorank
+- [x] Telegram notify on create new guest message
 - [ ] Implement blog module
 - [ ] Implement i18n

@@ -4,6 +4,7 @@ import { ImageFile } from "../images/entry";
 
 export const GuestbookMessages = t.Object({
   items: t.Array(GuestMessage),
+  avgReviewTime: t.Nullable(t.Number()),
   nextCursor: t.Nullable(t.String()),
   pageSize: t.Number(),
 });
@@ -18,7 +19,15 @@ const GuestbookStats = t.Object({
 });
 
 const CreateMessageBody = t.Composite([
-  t.Omit(GuestMessage, ["id", "status", "replyText", "avatarUrl", "createdAt", "updatedAt"]),
+  t.Omit(GuestMessage, [
+    "id",
+    "status",
+    "replyText",
+    "avatarUrl",
+    "createdAt",
+    "updatedAt",
+    "reviewedAt",
+  ]),
   t.Object({
     avatar: t.Optional(ImageFile),
   }),

@@ -57,10 +57,27 @@ export abstract class GuestMessageRepo {
       .executeTakeFirstOrThrow();
   }
 
+  static async getAvgReviewTime() {
+    return await db
+      .selectFrom("tf_guest_messages")
+      .select(({ fn, ref }) =>
+        sql<number>`round(${fn.avg(
+          sql<number>`EXTRACT(EPOCH FROM (${ref("reviewedAt")} - ${ref("createdAt")}))`,
+        )}, 1)::double precision`.as("avgReviewTime"),
+      )
+      .where("status", "!=", "review")
+      .executeTakeFirstOrThrow();
+  }
+
   static async approve(id: string, replyText?: string | null) {
     return await db
       .updateTable("tf_guest_messages")
-      .set({ status: "public", updatedAt: sql`now()`, replyText })
+      .set(({ fn }) => ({
+        status: "public",
+        updatedAt: sql`now()`,
+        replyText,
+        reviewedAt: fn.coalesce("reviewedAt", sql<any>`now()`),
+      }))
       .where("id", "=", id)
       .returningAll()
       .executeTakeFirstOrThrow();
@@ -69,7 +86,12 @@ export abstract class GuestMessageRepo {
   static async decline(id: string, replyText?: string | null) {
     return await db
       .updateTable("tf_guest_messages")
-      .set({ status: "declined", updatedAt: sql`now()`, replyText })
+      .set(({ fn }) => ({
+        status: "declined",
+        updatedAt: sql`now()`,
+        replyText,
+        reviewedAt: fn.coalesce("reviewedAt", sql<any>`now()`),
+      }))
       .where("id", "=", id)
       .returningAll()
       .executeTakeFirstOrThrow();

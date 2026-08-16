@@ -20,6 +20,7 @@ export abstract class GuestMessageService {
     await cache.incrVersion(`${this.prefix}:declined:version`);
     await cache.incrVersion(`${this.prefix}:all:version`);
     await cache.del(`${this.prefix}:stats`);
+    await cache.del(`${this.prefix}:avgReviewTime`);
     return true;
   }
 
@@ -66,10 +67,12 @@ export abstract class GuestMessageService {
       log.error({ msg: "Failed to get guest messages", err });
       throw new Error("Failed to get guest messages");
     });
-
+    const avgReviewTime = await this.getAvgReviewTime();
     const result = calcResult(rows);
-    await cache.set(key, result, DEFAULT_CURSOR_CACHE_TTL);
-    return result;
+    const finalResult = { ...result, avgReviewTime };
+
+    await cache.set(key, finalResult, DEFAULT_CURSOR_CACHE_TTL);
+    return finalResult;
   }
 
   static async getStats(): ReturnType<typeof GuestMessageRepo.getStats> {
@@ -81,11 +84,24 @@ export abstract class GuestMessageService {
     });
   }
 
+  static async getAvgReviewTime(): Promise<number | null> {
+    return await cache.remember(`${this.prefix}:avgReviewTime`, async () => {
+      const { avgReviewTime } = await GuestMessageRepo.getAvgReviewTime().catch((err) => {
+        log.error({ msg: "Failed to get guest messages avg review time", err });
+        return {
+          avgReviewTime: null,
+        };
+      });
+
+      return avgReviewTime;
+    });
+  }
+
   static async getAllWithStats(data: GetAllProps) {
-    const { items, nextCursor, pageSize } = await this.getAll(data);
+    const { items, avgReviewTime, nextCursor, pageSize } = await this.getAll(data);
     const stats = await this.getStats();
 
-    return { items, nextCursor, stats, pageSize };
+    return { items, avgReviewTime, nextCursor, stats, pageSize };
   }
 
   static async approve(id: string, replyText?: string | null) {

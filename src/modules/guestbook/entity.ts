@@ -49,6 +49,7 @@ export const GuestMessage = t.Object(
     ),
     createdAt: t.Date(),
     updatedAt: t.Date(),
+    reviewedAt: t.Nullable(t.Date()),
   },
   {
     error: "invalid guest message data",

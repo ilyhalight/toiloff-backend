@@ -1,3 +1,8 @@
+# 1.0.12
+
+- Added `avgReviewTime` field to guestbook data
+- Added `reviewedAt` field to guestbook messages
+
 # 1.0.11
 
 - Added `graceCache` implementation for webring data caching

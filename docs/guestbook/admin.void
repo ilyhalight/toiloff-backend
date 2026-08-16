@@ -244,10 +244,12 @@ attrs:
           "avatarUrl": null,
           "replyText": null,
           "createdAt": "2026-07-06T15:57:32.905Z",
-          "updatedAt": "2026-07-06T16:20:17.451Z"
+          "updatedAt": "2026-07-06T16:20:17.451Z",
+          "reviewedAt": "2026-07-06T16:20:17.451Z"
         },
         // ...
       ],
+      "avgReviewTime": 111926.1,
       "nextCursor": null,
       "pageSize": 1,
       "stats": {
@@ -275,14 +277,6 @@ content:
         marks:
           - type: code
         text: guestbook/index.void
-  - type: paragraph
-    attrs:
-      uid: null
-    content: "%%EMPTY_LINE%%"
-  - type: paragraph
-    attrs:
-      uid: null
-    content: "%%EMPTY_LINE%%"
 ---
 ```
 ```void
@@ -299,7 +293,7 @@ attrs:
 type: paragraph
 attrs:
   uid: a94ed27f-a79c-45eb-89ef-cfd8f6505051
-content: Let's approve created message
+content: Let's approve guest message
 ---
 ```
 ```void
@@ -318,7 +312,35 @@ content:
   - type: url
     attrs:
       uid: a45faed0-fb5e-4e1d-9dbb-969b0a161b85
-    content: "{{API_HOST}}/v1/admin/guestbook/{}"
+    content: "{{API_HOST}}/v1/admin/guestbook/{id}/approve"
+---
+```
+```void
+---
+type: path-table
+attrs:
+  uid: dbc461ee-f702-4bb3-9b97-5a08eeb0ff12
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - id
+          - 019f38ca-f4ea-725f-9860-fd52b5e9a2a4
+          - guestbook message id
+---
+```
+```void
+---
+type: json_body
+attrs:
+  uid: 1ae9c842-a0ed-467b-afa7-d44100eae372
+  body: |-
+    {
+      "replyText": null
+    }
 ---
 ```
 ```void
@@ -360,5 +382,154 @@ content:
           - body.status
           - equals
           - public
+---
+```
+```void
+---
+type: codeBlock
+attrs:
+  uid: 0ba0bcec-7cb0-4a8d-be08-99d7dd009e80
+  language: json
+  body: |-
+    {
+      "id": "019f38ca-f4ea-725f-9860-fd52b5e9a2a4",
+      "username": "toil2",
+      "content": "hello223",
+      "status": "public",
+      "href": null,
+      "subText": null,
+      "avatarUrl": null,
+      "replyText": null,
+      "createdAt": "2026-07-06T15:57:32.905Z",
+      "updatedAt": "2026-07-06T16:20:17.451Z",
+      "reviewedAt": "2026-07-06T16:20:17.451Z"
+    }
+---
+```
+```void
+---
+type: request-separator
+attrs:
+  uid: c2feb578-f5d7-40de-971c-0c569880625e
+  colorIndex: 0
+  label: Ephemeral Eagle
+---
+```
+```void
+---
+type: paragraph
+attrs:
+  uid: 8f10cb29-acdf-4701-9fbc-bb360cfe8661
+content: Let's decline guest message
+---
+```
+```void
+---
+type: request
+attrs:
+  uid: 400469da-86b0-4cfe-9a6d-b97d82f87088
+content:
+  - type: method
+    attrs:
+      uid: f4c0547f-778c-4870-9f9e-648969282544
+      method: POST
+      importedFrom: ""
+      visible: true
+    content: POST
+  - type: url
+    attrs:
+      uid: 043b4033-cbc6-4b1a-803e-484950fc3096
+    content: "{{API_HOST}}/v1/admin/guestbook/{id}/decline"
+---
+```
+```void
+---
+type: path-table
+attrs:
+  uid: 27bce9ea-3e74-4d76-93cf-7bde7f9c47e3
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - id
+          - 019f38ca-f4ea-725f-9860-fd52b5e9a2a4
+          - guestbook message id
+---
+```
+```void
+---
+type: json_body
+attrs:
+  uid: 390292eb-d993-4f1c-80d0-b7a867b805e6
+  body: |-
+    {
+      "replyText": null
+    }
+---
+```
+```void
+---
+type: headers-table
+attrs:
+  uid: 1181ccc8-8a29-44c1-8bb4-0d191fd395e9
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - Cookie
+          - tf_auth_token={{process.auth_token}}
+---
+```
+```void
+---
+type: assertions-table
+attrs:
+  uid: 701718e0-5243-4542-becc-275572b99a60
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - Check status is OK
+          - status
+          - equals
+          - "200"
+      - attrs:
+          disabled: false
+        row:
+          - Body  status is "public"
+          - body.status
+          - equals
+          - declined
+---
+```
+```void
+---
+type: codeBlock
+attrs:
+  uid: 15a61e7d-89f7-47f2-8fed-086b8047b5be
+  language: json
+  body: |-
+    {
+      "id": "019f38ca-f4ea-725f-9860-fd52b5e9a2a4",
+      "username": "toil2",
+      "content": "hello223",
+      "status": "declined",
+      "href": null,
+      "subText": null,
+      "avatarUrl": null,
+      "replyText": null,
+      "createdAt": "2026-07-06T15:57:32.905Z",
+      "updatedAt": "2026-07-06T16:20:17.451Z",
+      "reviewedAt": "2026-07-06T16:20:17.451Z"
+    }
 ---
 ```

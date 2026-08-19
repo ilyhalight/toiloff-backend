@@ -50,5 +50,20 @@ export default new Elysia().group("/guestbook", (app) =>
           summary: "Decline guestbook message",
         },
       },
+    )
+    .delete(
+      "/:messageId",
+      async ({ params: { messageId } }) => {
+        return await GuestMessageService.delete(messageId);
+      },
+      {
+        params: GuestbookModel.messageIdParam,
+        response: {
+          200: GuestbookModel.messageResponse,
+        },
+        detail: {
+          summary: "Force delete guestbook message",
+        },
+      },
     ),
 );

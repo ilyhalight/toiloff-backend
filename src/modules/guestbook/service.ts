@@ -137,4 +137,21 @@ export abstract class GuestMessageService {
     await this.incrAllVersions();
     return result;
   }
+
+  static async delete(id: string) {
+    const result = await GuestMessageRepo.delete(id).catch((err) => {
+      if ((err as Error).message === "no result") {
+        throw new GuestMessageNotFoundError();
+      }
+
+      log.error({ msg: "Failed to delete guest message", err });
+      throw new Error("Failed to delete guest message");
+    });
+    if (!result) {
+      return result;
+    }
+
+    await this.incrAllVersions();
+    return result;
+  }
 }

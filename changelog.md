@@ -1,3 +1,7 @@
+# 1.0.13
+
+- Added endpoint to force delete guestbook message
+
 # 1.0.12
 
 - Added `avgReviewTime` field to guestbook data

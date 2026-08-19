@@ -96,4 +96,12 @@ export abstract class GuestMessageRepo {
       .returningAll()
       .executeTakeFirstOrThrow();
   }
+
+  static async delete(id: string) {
+    return await db
+      .deleteFrom("tf_guest_messages")
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirstOrThrow();
+  }
 }

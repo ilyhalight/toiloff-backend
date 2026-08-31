@@ -1,3 +1,8 @@
+# 1.0.14
+
+- Sort images by name in descending order
+- Bump depends
+
 # 1.0.13
 
 - Added endpoint to force delete guestbook message

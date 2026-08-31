@@ -30,7 +30,9 @@ export abstract class ImagesService {
   static async getAll(folder = DEFAULT_IMAGE_FODLER) {
     const glob = new Glob("*.{png,jpg,gif,webp}");
     const dirpath = path.join(BASE_PUBLIC_IMAGES, folder);
-    return await Array.fromAsync(glob.scan({ cwd: dirpath, onlyFiles: true }));
+    return (await Array.fromAsync(glob.scan({ cwd: dirpath, onlyFiles: true }))).sort((a, b) =>
+      b.localeCompare(a),
+    );
   }
 
   static async delete(imageId: string, folder = DEFAULT_IMAGE_FODLER): Promise<string> {

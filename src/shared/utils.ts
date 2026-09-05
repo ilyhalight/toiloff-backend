@@ -30,6 +30,7 @@ export const clearText = (text: string) =>
   text
     .trim()
     .normalize("NFD")
-    .replace(/\p{M}+/gu, "")
+    .replace(/([\p{L}\p{N}])(\p{M}{3,})/gu, "$1")
+    .normalize("NFC")
     .replace(/\s+/g, " ")
     .replaceAll("‮", "");

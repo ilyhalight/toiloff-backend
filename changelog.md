@@ -1,3 +1,7 @@
+# 1.0.15
+
+- Fixed clearing `ё` and `й` in `clearText` function (and also other languages letters with diacritics)
+
 # 1.0.14
 
 - Sort images by name in descending order

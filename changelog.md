@@ -1,3 +1,9 @@
+# 1.0.16
+
+- [!] Migrated config to [microconf](https://github.com/nirelc/microconf) lib
+- Replaced floats to integers in some config schemas (`port`, `maxAge`, `ttl`, `expiresAt`, `lifetime`)
+- Removed set `true` to config field `webring.enabled` if env variable `WEBRING_ENABLED` unset
+
 # 1.0.15
 
 - Fixed clearing `ё` and `й` in `clearText` function (and also other languages letters with diacritics)

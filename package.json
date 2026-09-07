@@ -1,8 +1,7 @@
 {
   "name": "toiloff-backend",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/**/*.ts --watch src/assets/*.txt",
     "start": "NODE_ENV=production bun src/index.ts",
     "migrate": "MIGRATOR_ACTION=upgrade bun run src/migrator.ts",
@@ -13,14 +12,15 @@
   },
   "dependencies": {
     "@elysia/cors": "^1.4.2",
-    "@elysia/openapi": "^1.4.15",
+    "@elysia/openapi": "^1.4.16",
     "@elysia/static": "^1.4.11",
     "@mtcute/bun": "^0.32.1",
     "@mtcute/html-parser": "^0.32.1",
+    "@nirelc/microconf": "^0.0.2",
     "altcha-lib": "^2.4.0",
     "elysia": "latest",
     "elysia-http-status-code": "^1.0.9",
-    "jose": "^6.2.10",
+    "jose": "^6.2.12",
     "kysely": "^0.29.5",
     "kysely-postgres-js": "^4.0.0",
     "lexorank": "^1.0.5"

@@ -1,16 +1,11 @@
 import path from "node:path";
-
-import { Value } from "@sinclair/typebox/value";
-import { Type as t, type Static } from "@sinclair/typebox";
-
-import type { DeepPartial } from "@/types/utils";
+import { env, defineConfig, t as mc } from "@nirelc/microconf";
 
 import { version } from "../../package.json";
 import { log } from "@/logging";
 
 const APP_LICENSE = "MIT";
 const SCALAR_CDN = "https://unpkg.com/@scalar/api-reference@latest/dist/browser/standalone.js";
-const SERVER_PORT = Number.parseInt(Bun.env.SERVICE_PORT ?? "3001");
 const ASSETS_PATH = path.join(__dirname, "..", "assets");
 const GITHUB_URL = "https://github.com/ilyhalight/toiloff-backend";
 const DEFAULT_SERVICE_TOKEN = "LUMMPJfMLM_g=fQJTZet~3!htp4C!L]1";
@@ -19,6 +14,7 @@ const DEFAULT_PASSWORD = "root";
 const DEFAULT_DOMAIN = "localhost";
 const DEFAULT_AUTH_LIFETIME = 3600; // 1 hour
 export const BAD_USERNAMES_PREVIEW_URL = `${GITHUB_URL}/tree/master/src/assets/bad-usernames.example.txt`;
+const BAD_USERNAMES = await parseTextAsset(path.join(ASSETS_PATH, "bad-usernames.txt"));
 
 async function parseTextAsset(path: string) {
   const file = Bun.file(path);
@@ -33,125 +29,88 @@ async function parseTextAsset(path: string) {
     .filter((line) => !(line.startsWith("#--") && line.endsWith("--#")));
 }
 
-export const ConfigSchema = t.Object({
-  server: t.Object({
-    port: t.Number(),
-    hostname: t.String({ default: "0.0.0.0" }),
-  }),
-  app: t.Object({
-    name: t.String({ default: "Toiloff API" }),
-    desc: t.String({ default: "" }),
-    version: t.Literal(version, { readOnly: true, default: version }),
-    license: t.Literal(APP_LICENSE, { readOnly: true, default: APP_LICENSE }),
-    githubUrl: t.String({
-      default: GITHUB_URL,
+const PortSchema = mc.integer().min(1).max(65535);
+
+const config = defineConfig({
+  schema: {
+    server: {
+      port: PortSchema.default(3001),
+      hostname: mc.string().default("0.0.0.0"),
+    },
+    app: {
+      name: mc.string().default("Toiloff API"),
+      desc: mc.string().default(""),
+      version: mc.literal(version).default(version),
+      license: mc.literal(APP_LICENSE).default(APP_LICENSE),
+      githubUrl: mc.string().default(GITHUB_URL),
+      scalarCDN: mc.literal(SCALAR_CDN).default(SCALAR_CDN),
+      publicPath: mc.string().default(path.join(__dirname, "..", "public")),
+      domain: mc.string().default(DEFAULT_DOMAIN),
+    },
+    cors: {
+      allowedHeaders: mc.string().default("*"),
+      origin: mc.string().default("*"),
+      methods: mc.string().default("GET, POST, PATCH, DELETE, OPTIONS"),
+      maxAge: mc.integer().default(86400),
+    },
+    db: {
+      name: mc.string().default("tf-backend"),
+      host: mc.string().default("127.0.0.1"),
+      port: PortSchema.default(5432),
+      user: mc.string().default("postgres"),
+      password: mc.string().default("postgres"),
+    },
+    redis: {
+      host: mc.string().default("127.0.0.1"),
+      port: PortSchema.default(6379),
+      username: mc.string().default("default"),
+      password: mc.string().default(""),
+      prefix: mc.string().default("tfb"),
+      ttl: mc.integer().min(1).default(7200), // Only for DB caching
+    },
+    assets: {
+      badUsernames: mc.array(mc.string()).default(BAD_USERNAMES),
+    },
+    captcha: {
+      enabled: mc.boolean().default(true),
+      expiresAt: mc.integer().default(60_000), // expires in 1 minutes
+      signature: mc.string(),
+      keySignature: mc.string(),
+    },
+    auth: {
+      serviceToken: mc.string().default(DEFAULT_SERVICE_TOKEN),
+      username: mc.string().default(DEFAULT_USERNAME),
+      password: mc.string().min(1).default(DEFAULT_PASSWORD),
+      secret: mc.string().default("doesnttrustit"),
+      lifetime: mc.integer().default(DEFAULT_AUTH_LIFETIME),
+      algo: mc.literal("HS256").default("HS256"),
+      cookieDomain: mc.string().default(DEFAULT_DOMAIN),
+    },
+    notify: {
+      enabled: mc.boolean().default(true),
+    },
+    webring: {
+      enabled: mc.boolean().default(false),
+      domain: mc.string().default("webring.otomir23.me"),
+      slug: mc.string().default("toil"),
+    },
+  },
+  sources: [
+    env({
+      delimiter: "_",
+      renames: {
+        SERVER_PORT: "SERVICE_PORT",
+        SERVER_HOSTNAME: "SERVICE_HOST",
+        DB_NAME: "POSTGRES_NAME",
+        DB_HOST: "POSTGRES_HOST",
+        DB_PORT: "POSTGRES_PORT",
+        DB_USER: "POSTGRES_USER",
+        DB_PASSWORD: "POSTGRES_PASSWORD",
+        REDIS_USERNAME: "REDIS_USER",
+      },
     }),
-    scalarCDN: t.Literal(SCALAR_CDN, { readOnly: true, default: SCALAR_CDN }),
-    publicPath: t.String(),
-    domain: t.String({ default: DEFAULT_DOMAIN }),
-  }),
-  cors: t.Object({
-    allowedHeaders: t.String({ default: "*" }),
-    origin: t.String({ default: "*" }),
-    methods: t.String({ default: "GET, POST, PATCH, DELETE, OPTIONS" }),
-    maxAge: t.Number({ default: 86400 }),
-  }),
-  db: t.Object({
-    name: t.String({ default: "tf-backend" }),
-    host: t.String({ default: "127.0.0.1" }),
-    port: t.Number(),
-    user: t.String({ default: "postgres" }),
-    password: t.String({ default: "postgres" }),
-  }),
-  redis: t.Object({
-    host: t.String({ default: "127.0.0.1" }),
-    port: t.Number(),
-    username: t.String({ default: "default" }),
-    password: t.String({ default: "" }),
-    prefix: t.String({ default: "tfb" }),
-    ttl: t.Number(), // Only for DB caching
-  }),
-  assets: t.Object({
-    badUsernames: t.Array(t.String()),
-  }),
-  captcha: t.Object({
-    enabled: t.Boolean({ default: true }),
-    expiresAt: t.Number({ default: 60_000 }), // expires in 1 minutes
-    signature: t.String(),
-    keySignature: t.String(),
-  }),
-  auth: t.Object({
-    serviceToken: t.String({ default: DEFAULT_SERVICE_TOKEN }),
-    username: t.String({ default: DEFAULT_USERNAME }),
-    password: t.String({ default: DEFAULT_PASSWORD }),
-    secret: t.String({ default: "doesnttrustit" }),
-    lifetime: t.Number({ default: DEFAULT_AUTH_LIFETIME }),
-    algo: t.Literal("HS256", { default: "HS256" }),
-    cookieDomain: t.String({ default: DEFAULT_DOMAIN }),
-  }),
-  notify: t.Object({
-    enabled: t.Boolean({ default: true }),
-  }),
-  webring: t.Object({
-    enabled: t.Boolean({ default: false }),
-    domain: t.String({ default: "webring.otomir23.me" }),
-    slug: t.String({ default: "toil" }),
-  }),
+  ],
 });
+config.auth.password = await Bun.password.hash(config.auth.password);
 
-export type ConfigSchemaType = Static<typeof ConfigSchema>;
-
-export default Value.Parse(ConfigSchema, {
-  server: {
-    port: SERVER_PORT,
-    hostname: Bun.env.SERVICE_HOST,
-  },
-  app: {
-    name: Bun.env.APP_NAME,
-    desc: Bun.env.APP_DESC,
-    domain: Bun.env.APP_DOMAIN,
-    publicPath: path.join(__dirname, "..", "public"),
-  },
-  cors: {},
-  db: {
-    name: Bun.env.POSTGRES_NAME,
-    host: Bun.env.POSTGRES_HOST,
-    port: Number.parseInt(Bun.env.POSTGRES_PORT ?? "5432"),
-    user: Bun.env.POSTGRES_USER,
-    password: Bun.env.POSTGRES_PASSWORD,
-  },
-  redis: {
-    host: Bun.env.REDIS_HOST,
-    port: Number.parseInt(Bun.env.REDIS_PORT ?? "6379"),
-    username: Bun.env.REDIS_USER,
-    password: Bun.env.REDIS_PASSWORD,
-    prefix: Bun.env.REDIS_PREFIX,
-    ttl: Number.parseInt(Bun.env.REDIS_TTL ?? "7200"),
-  },
-  assets: {
-    badUsernames: await parseTextAsset(path.join(ASSETS_PATH, "bad-usernames.txt")),
-  },
-  captcha: {
-    // not recommended to disable captcha in production
-    // disables captcha verification, but still requires the captcha headers to be present in the request
-    enabled: Bun.env.CAPTCHA_ENABLED !== "false",
-    signature: Bun.env.CAPTCHA_SIGNATURE,
-    keySignature: Bun.env.CAPTCHA_KEY_SIGNATURE,
-  },
-  auth: {
-    serviceToken: Bun.env.AUTH_SERVICE_TOKEN,
-    username: Bun.env.AUTH_USERNAME,
-    password: await Bun.password.hash(Bun.env.AUTH_PASSWORD || DEFAULT_PASSWORD),
-    secret: Bun.env.AUTH_SECRET,
-    cookieDomain: Bun.env.AUTH_COOKIE_DOMAIN,
-  },
-  notify: {
-    // skip pub/sub notify events if disabled
-    enabled: Bun.env.NOTIFY_ENABLED !== "false",
-  },
-  webring: {
-    enabled: Bun.env.WEBRING_ENABLED !== "false",
-    domain: Bun.env.WEBRING_DOMAIN,
-    slug: Bun.env.WEBRING_SLUG,
-  },
-} as const satisfies DeepPartial<ConfigSchemaType>);
+export default config;

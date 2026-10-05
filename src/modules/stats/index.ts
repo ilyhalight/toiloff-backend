@@ -24,6 +24,20 @@ export default new Elysia({
         },
       },
     )
+    .get(
+      "/models",
+      async () => {
+        return await StatsService.getTopModels();
+      },
+      {
+        response: {
+          200: StatsModel.getTopModelsResponse,
+        },
+        detail: {
+          summary: "Get top models by usage",
+        },
+      },
+    )
     .guard({}, (app) =>
       app
         .resolve(serviceResolver)

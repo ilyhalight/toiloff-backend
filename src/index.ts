@@ -28,6 +28,7 @@ import { FieldEmptyError } from "./shared/error";
 import { ProjectInvalidPosition, ProjectNotFound } from "./modules/projects/error";
 import { AVATARS_IMAGE_FOLDER, DEFAULT_IMAGE_FODLER } from "./modules/images/service";
 import { log } from "./logging";
+import { LLMModelsService } from "./modules/stats/service";
 
 const {
   server: { hostname, port },
@@ -65,6 +66,13 @@ await Promise.all(
     });
   }),
 );
+
+async function warmupCache() {
+  await LLMModelsService.getModels();
+  await LLMModelsService.getProviders();
+}
+
+void warmupCache();
 
 const app = new Elysia({
   prefix: "/v1",

@@ -42,6 +42,50 @@ export abstract class LLMSessionsRepo {
       ])
       .executeTakeFirstOrThrow();
   }
+
+  static async getTopModels() {
+    return await db
+      .selectFrom("tf_llm_sessions")
+      .select([
+        "model",
+        sql<string>`COALESCE(
+          SUM("tokensTotal"),
+          0
+        )`.as("totalTokens"),
+        sql<string>`COALESCE(
+          SUM("tokensTotal") FILTER (WHERE "createdAt" >= NOW() - INTERVAL '30 days'),
+          0
+        )`.as("monthTotalTokens"),
+        sql<string>`COALESCE(
+          SUM("tokensInput"),
+          0
+        )`.as("inputTokens"),
+        sql<string>`COALESCE(
+        SUM("tokensInput") FILTER (WHERE "createdAt" >= NOW() - INTERVAL '30 days'),
+          0
+        )`.as("monthInputTokens"),
+        sql<string>`COALESCE(
+          SUM("tokensOutput"),
+          0
+        )`.as("outputTokens"),
+        sql<string>`COALESCE(
+        SUM("tokensOutput") FILTER (WHERE "createdAt" >= NOW() - INTERVAL '30 days'),
+          0
+        )`.as("monthOutputTokens"),
+        sql<string>`COALESCE(
+          SUM("tokensCacheRead"),
+          0
+        )`.as("cacheReadTokens"),
+        sql<string>`COALESCE(
+          SUM("tokensCacheRead") FILTER (WHERE "createdAt" >= NOW() - INTERVAL '30 days'),
+          0
+        )`.as("monthCacheReadTokens"),
+      ])
+      .groupBy(["model"])
+      .orderBy("totalTokens", "desc")
+      .limit(10)
+      .execute();
+  }
 }
 
 export abstract class GHStatSnapshotsRepo {

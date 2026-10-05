@@ -1,3 +1,7 @@
+# 1.0.17
+
+- Added endpoint `/stats/models` to see my usage of LLM models
+
 # 1.0.16
 
 - [!] Migrated config to [microconf](https://github.com/nirelc/microconf) lib

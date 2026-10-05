@@ -46,3 +46,23 @@ export const NewLLMSession = t.Object({
   createdAt: t.Optional(t.String({ format: "date-time" })),
   updatedAt: t.Optional(t.String({ format: "date-time" })),
 });
+
+export const TopModelTokensData = t.Object({
+  raw: t.Number(),
+  formatted: t.String(),
+});
+
+export const TopModelTokens = t.Object({
+  input: TopModelTokensData,
+  output: TopModelTokensData,
+  cacheRead: TopModelTokensData,
+  all: TopModelTokensData,
+});
+
+export const TopModel = t.Object({
+  modelId: t.String(),
+  model: t.String(),
+  lab: t.String(),
+  totalTokens: TopModelTokens,
+  monthTokens: TopModelTokens,
+});

@@ -92,3 +92,32 @@ export const graceCache = {
     await cache.del(`${this.prefix}${key}`);
   },
 };
+
+/**
+ * fetch data with in memory caching
+ */
+export function cachedFetcher<T>(
+  fetcher: () => Promise<T>,
+  fallback: () => Promise<T>,
+  cacheTTL = 3600,
+) {
+  let value: T | undefined;
+  let expiresAt = 0;
+  let pending: Promise<T> | undefined;
+
+  const refresh = () =>
+    (pending ??= fetcher()
+      .catch(async () => value ?? fallback())
+      .then((v) => {
+        value = v;
+        expiresAt = getTimestamp() + cacheTTL;
+        return v;
+      })
+      .finally(() => (pending = undefined)));
+
+  return async () => {
+    if (value === undefined) return refresh();
+    if (expiresAt <= getTimestamp()) void refresh();
+    return value;
+  };
+}

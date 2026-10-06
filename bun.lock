@@ -10,14 +10,14 @@
         "@elysia/static": "^1.4.11",
         "@mtcute/bun": "^0.32.1",
         "@mtcute/html-parser": "^0.32.1",
-        "@nirelc/microconf": "^0.0.2",
+        "@nirelc/microconf": "^0.0.3",
         "@opencode-ai/models": "^0.0.95",
         "altcha-lib": "^2.4.0",
         "elysia": "latest",
         "elysia-http-status-code": "^1.0.9",
         "jose": "^6.2.12",
         "kysely": "^0.29.5",
-        "kysely-postgres-js": "^4.0.0",
+        "kysely-postgres-js": "^5.0.1",
         "lexorank": "^1.0.5",
       },
       "devDependencies": {
@@ -57,9 +57,9 @@
 
     "@mtcute/wasm": ["@mtcute/wasm@0.32.0", "https://registry.nirel.cc/npm/@mtcute/wasm/-/wasm-0.32.0.tgz", {}, "sha512-Hkp+h7OYN1GPpJ3HYeQfBM/OgvF0oWCuS2OY0shwigQmNJib2gX7fIH+KDd5UsRNuHptWASawMjKA+wLnGpSvw=="],
 
-    "@nirelc/microconf": ["@nirelc/microconf@0.0.2", "https://registry.nirel.cc/npm/@nirelc/microconf/-/microconf-0.0.2.tgz", { "dependencies": { "@nirelc/microtype": "^0.0.2" } }, "sha512-EYWSpGoe98RRV8SLWR7B7cU+rCayteVCHdWROR+QNxyXL7scVp4SOfpz5dvOzGg2UDEHmZrvJlhI8xKvlGpfPQ=="],
+    "@nirelc/microconf": ["@nirelc/microconf@0.0.3", "https://registry.nirel.cc/npm/@nirelc/microconf/-/microconf-0.0.3.tgz", { "dependencies": { "@nirelc/microtype": "^0.0.3" } }, "sha512-/X2aP4jtLLTpHiZcQvjrNFhlZBbFc2T0h5XX+v0UGGdddhVFq7n3ZEtzy8xtOWzHnrolOblY53QrXz3orvsU1A=="],
 
-    "@nirelc/microtype": ["@nirelc/microtype@0.0.2", "https://registry.nirel.cc/npm/@nirelc/microtype/-/microtype-0.0.2.tgz", {}, "sha512-CSpbg285U68fLUa4Do9jwuQxT03s2PcqvB52TOcsRh7YAxE7rGCxlXyKwvKAO8s250OUgnXrJMCXwUK/d/YfLA=="],
+    "@nirelc/microtype": ["@nirelc/microtype@0.0.3", "https://registry.nirel.cc/npm/@nirelc/microtype/-/microtype-0.0.3.tgz", {}, "sha512-jvLsuBx02/LU70O323sCri+/84WnMS1CgGkXpbGWl7DN/Lae0jw7lgLe9c43pXXguKOA8hSVgJuM9kkXszjYdA=="],
 
     "@opencode-ai/models": ["@opencode-ai/models@0.0.95", "https://registry.nirel.cc/npm/@opencode-ai/models/-/models-0.0.95.tgz", { "peerDependencies": { "effect": "4.0.0-beta.83" }, "optionalPeers": ["effect"] }, "sha512-f7cQWkUtO3NS7UPnFuaIyKlL3TqChnlqIoPN68GH0rVVBurkl+G2LBbFdzOf0K9NQfXb5EonDL4aZmUfr9uYwA=="],
 
@@ -149,7 +149,7 @@
 
     "kysely": ["kysely@0.29.5", "https://registry.nirel.cc/npm/kysely/-/kysely-0.29.5.tgz", {}, "sha512-ooa+eSbBNPTo3MycPEuW5jdrxQdQwdtB3LC3h43FiXQbIry5tR0C5lDG7eealK0E4D7XjrnOP5DIUg/LyjRMYQ=="],
 
-    "kysely-postgres-js": ["kysely-postgres-js@4.0.0", "https://registry.nirel.cc/npm/kysely-postgres-js/-/kysely-postgres-js-4.0.0.tgz", { "peerDependencies": { "kysely": ">= 0.29.0 < 1", "postgres": "^3.4.0" }, "optionalPeers": ["postgres"] }, "sha512-zIGYZ1TMduPZJAyeRMo9OodZYPxK4RI8OIKO8XShHiv5gzaY+KxmZnKcnYRvbfdmUH0kv+ZTlYrBZ5Uk+lI1QA=="],
+    "kysely-postgres-js": ["kysely-postgres-js@5.0.1", "https://registry.nirel.cc/npm/kysely-postgres-js/-/kysely-postgres-js-5.0.1.tgz", { "peerDependencies": { "kysely": ">= 0.29.0 < 1", "postgres": "^3.4.0" }, "optionalPeers": ["postgres"] }, "sha512-3qY2qzXJszS35CMuknpon79CE5G7MfcTMoIQHuFmGsaQQ2rau3rwx7eNaRJkO9nhli8yQedQroBZ/VehzNJy4w=="],
 
     "lexorank": ["lexorank@1.0.5", "https://registry.nirel.cc/npm/lexorank/-/lexorank-1.0.5.tgz", {}, "sha512-K1B/Yr/gIU0wm68hk/yB0p/mv6xM3ShD5aci42vOwcjof8slG8Kpo3Q7+1WTv7DaRHKWRgLPqrFDt+4GtuFAtA=="],
 

@@ -1,6 +1,9 @@
 # 1.0.17
 
+- Added BFF (backend for frontend) endpoints
+  - `/` for main page
 - Added endpoint `/stats/models` to see my usage of LLM models
+- Bump depends
 
 # 1.0.16
 

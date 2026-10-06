@@ -1,6 +1,6 @@
 {
   "name": "toiloff-backend",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "scripts": {
     "dev": "bun run --watch src/**/*.ts --watch src/assets/*.txt",
     "start": "NODE_ENV=production bun src/index.ts",
@@ -16,14 +16,14 @@
     "@elysia/static": "^1.4.11",
     "@mtcute/bun": "^0.32.1",
     "@mtcute/html-parser": "^0.32.1",
-    "@nirelc/microconf": "^0.0.2",
+    "@nirelc/microconf": "^0.0.3",
     "@opencode-ai/models": "^0.0.95",
     "altcha-lib": "^2.4.0",
     "elysia": "latest",
     "elysia-http-status-code": "^1.0.9",
     "jose": "^6.2.12",
     "kysely": "^0.29.5",
-    "kysely-postgres-js": "^4.0.0",
+    "kysely-postgres-js": "^5.0.1",
     "lexorank": "^1.0.5"
   },
   "type": "module",

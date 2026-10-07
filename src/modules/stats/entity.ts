@@ -66,3 +66,5 @@ export const TopModel = t.Object({
   totalTokens: TopModelTokens,
   monthTokens: TopModelTokens,
 });
+
+export type TopModel = typeof TopModel.static;

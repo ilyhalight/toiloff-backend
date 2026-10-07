@@ -4,6 +4,7 @@ import { GHStatSnapshotsRepo, LLMSessionsRepo } from "./repo";
 import { NewLLMSession } from "./schema";
 import { log } from "@/logging";
 import { ModelMetadata, type ModelMetadataMap, Models } from "@opencode-ai/models";
+import { TopModel } from "./entity";
 
 // 10 MINUTES
 const STATS_CACHE_TTL = 600;
@@ -17,6 +18,14 @@ const MODEL_NAME_OVERRIDE = {
   "muse-spark-1.3-contributor-free": "muse-spark-1.3",
   "deepseek-flash": "deepseek-v4.1",
 } as const;
+
+const STEALTH_MODELS = { "x-preview-f-free": { name: "Ox Alpha", lab: "Stealth" } };
+
+type Tokens = { input: number; output: number; cacheRead: number; all: number };
+type MergedTopModel = Pick<TopModel, "modelId" | "model" | "lab"> & {
+  total: Tokens;
+  month: Tokens;
+};
 
 export abstract class LLMModelsService {
   static getProviders = cachedFetcher(
@@ -73,9 +82,25 @@ export abstract class LLMModelsService {
   }
 }
 
+const sumTokens = (a: Tokens, b: Tokens): Tokens => ({
+  input: a.input + b.input,
+  output: a.output + b.output,
+  cacheRead: a.cacheRead + b.cacheRead,
+  all: a.all + b.all,
+});
+
+const tokenStat = (raw: number) => ({ raw, formatted: humanFormat(raw) });
+const formatTokens = (t: Tokens) => ({
+  input: tokenStat(t.input),
+  output: tokenStat(t.output),
+  cacheRead: tokenStat(t.cacheRead),
+  all: tokenStat(t.all),
+});
+
 export abstract class StatsService {
   static githubSnapshotKey = "stats:github-snapshot" as const;
   static llmUsageKey = "stats:llm-usage" as const;
+  static statsKey = "stats" as const;
 
   static async upsertSessions(items: NewLLMSession[]) {
     if (items.length === 0) {
@@ -89,7 +114,9 @@ export abstract class StatsService {
       throw new Error("Failed to upsert LLM sessions");
     });
     const count = result?.[0]?.numInsertedOrUpdatedRows ?? items.length;
-    await cache.del("stats");
+    await cache.del(this.statsKey);
+    await cache.del(this.llmUsageKey);
+
     return {
       count: Number(count),
     };
@@ -122,14 +149,14 @@ export abstract class StatsService {
       return result;
     }
 
-    await cache.del("stats");
+    await cache.del(this.statsKey);
     await cache.set(this.githubSnapshotKey, result, LAST_SNAPSHOT_TTL);
     return result;
   }
 
   static async getStats() {
     return await cache.remember(
-      "stats",
+      this.statsKey,
       async () => {
         const { month, total } = await LLMSessionsRepo.getStats();
         const { commits, stars } = await this.getLastSnapshot();
@@ -152,20 +179,24 @@ export abstract class StatsService {
     return await cache.remember(
       this.llmUsageKey,
       async () => {
-        const mostUsedModels = await LLMSessionsRepo.getTopModels().catch((err) => {
+        const [mostUsedModels, models, providers] = await Promise.all([
+          LLMSessionsRepo.getTopModels(),
+          LLMModelsService.getModels(),
+          LLMModelsService.getProviders(),
+        ]).catch((err) => {
           log.error({ msg: "Failed to get top models", err });
-          throw new Error("Failed to get top models");
+          throw new Error("Failed to get top models", { cause: err });
         });
-        const models = await LLMModelsService.getModels();
-        const providers = await LLMModelsService.getProviders();
 
-        return mostUsedModels.map((mod) => {
+        const merged = new Map<string, MergedTopModel>();
+
+        for (const mod of mostUsedModels) {
           const model = LLMModelsService.findModelById(mod.model, models);
           const providerId = (
             model?.id ?? (mod.model.includes("/") ? mod.model : undefined)
           )?.split("/")[0];
           const provider = providerId ? providers[providerId] : undefined;
-          const providerName = provider?.name ?? providerId ?? "Unknown";
+          let providerName = provider?.name ?? providerId ?? mod.modelProvider ?? "Unknown";
 
           const inputTokens = parseInt(mod.inputTokens);
           const outputTokens = parseInt(mod.outputTokens);
@@ -176,50 +207,54 @@ export abstract class StatsService {
           const monthCacheReadTokens = parseInt(mod.monthCacheReadTokens);
           const monthTotalTokens = parseInt(mod.monthTotalTokens);
 
-          return {
-            modelId: mod.model,
-            model: model?.name ?? mod.model,
-            lab: providerName,
-            totalTokens: {
-              input: {
-                raw: inputTokens,
-                formatted: humanFormat(inputTokens),
-              },
-              output: {
-                raw: outputTokens,
-                formatted: humanFormat(outputTokens),
-              },
-              cacheRead: {
-                raw: cacheReadTokens,
-                formatted: humanFormat(cacheReadTokens),
-              },
-              all: {
-                raw: totalTokens,
-                formatted: humanFormat(totalTokens),
-              },
-            },
-            monthTokens: {
-              input: {
-                raw: monthInputTokens,
-                formatted: humanFormat(monthInputTokens),
-              },
-              output: {
-                raw: monthOutputTokens,
-                formatted: humanFormat(monthOutputTokens),
-              },
-              cacheRead: {
-                raw: monthCacheReadTokens,
-                formatted: humanFormat(monthCacheReadTokens),
-              },
-              all: {
-                raw: monthTotalTokens,
-                formatted: humanFormat(monthTotalTokens),
-              },
-            },
+          let modelName = model?.name ?? mod.model;
+          if (modelName.toLowerCase() in STEALTH_MODELS) {
+            const stealthModel =
+              STEALTH_MODELS[modelName.toLowerCase() as keyof typeof STEALTH_MODELS];
+            modelName = stealthModel.name;
+            providerName = stealthModel.lab;
+          }
+
+          const total: Tokens = {
+            input: inputTokens,
+            output: outputTokens,
+            cacheRead: cacheReadTokens,
+            all: totalTokens,
           };
-        });
+          const month: Tokens = {
+            input: monthInputTokens,
+            output: monthOutputTokens,
+            cacheRead: monthCacheReadTokens,
+            all: monthTotalTokens,
+          };
+          const existsModel = merged.get(modelName);
+          if (existsModel) {
+            existsModel.total = sumTokens(existsModel.total, total);
+            existsModel.month = sumTokens(existsModel.month, month);
+            continue;
+          }
+
+          merged.set(modelName, {
+            modelId: mod.model,
+            model: modelName,
+            lab: providerName,
+            total,
+            month,
+          });
+        }
+
+        return [...merged.values()]
+          .sort((a, b) => b.total.all - a.total.all)
+          .slice(0, 10)
+          .map(
+            ({ total, month, ...rest }): TopModel => ({
+              ...rest,
+              totalTokens: formatTokens(total),
+              monthTokens: formatTokens(month),
+            }),
+          );
       },
-      STATS_CACHE_TTL,
+      MODELS_CACHE_TTL,
     );
   }
 }

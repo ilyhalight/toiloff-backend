@@ -48,6 +48,7 @@ export abstract class LLMSessionsRepo {
       .selectFrom("tf_llm_sessions")
       .select([
         "model",
+        sql<string>`MAX("modelProvider")`.as("modelProvider"),
         sql<string>`COALESCE(
           SUM("tokensTotal"),
           0
@@ -83,7 +84,7 @@ export abstract class LLMSessionsRepo {
       ])
       .groupBy(["model"])
       .orderBy("totalTokens", "desc")
-      .limit(10)
+      .limit(20)
       .execute();
   }
 }

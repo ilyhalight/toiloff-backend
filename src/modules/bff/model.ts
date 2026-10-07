@@ -9,4 +9,8 @@ export const BFFModel = {
     webring: t.Union([t.Null(), WebringModel.getResponse]),
     stats: StatsModel.getStatsResponse,
   }),
+  getModelsPage: t.Object({
+    models: StatsModel.getTopModelsResponse,
+    stats: StatsModel.getStatsResponse,
+  }),
 };

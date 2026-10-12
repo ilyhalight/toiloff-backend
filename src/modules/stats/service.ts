@@ -19,7 +19,16 @@ const MODEL_NAME_OVERRIDE = {
   "deepseek-flash": "deepseek-v4.1",
 } as const;
 
-const STEALTH_MODELS = { "x-preview-f-free": { name: "Ox Alpha", lab: "Stealth" } };
+const REWRITTEN_MODELS = {
+  "x-preview-f-free": {
+    name: "Ox Alpha",
+    lab: "Stealth",
+  },
+  "neosmith.intelligent-pro": {
+    name: "NeoSmith Pro",
+    lab: "NeoSmith",
+  },
+};
 
 type Tokens = { input: number; output: number; cacheRead: number; all: number };
 type MergedTopModel = Pick<TopModel, "modelId" | "model" | "lab"> & {
@@ -208,9 +217,9 @@ export abstract class StatsService {
           const monthTotalTokens = parseInt(mod.monthTotalTokens);
 
           let modelName = model?.name ?? mod.model;
-          if (modelName.toLowerCase() in STEALTH_MODELS) {
+          if (modelName.toLowerCase() in REWRITTEN_MODELS) {
             const stealthModel =
-              STEALTH_MODELS[modelName.toLowerCase() as keyof typeof STEALTH_MODELS];
+              REWRITTEN_MODELS[modelName.toLowerCase() as keyof typeof REWRITTEN_MODELS];
             modelName = stealthModel.name;
             providerName = stealthModel.lab;
           }

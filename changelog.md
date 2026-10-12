@@ -1,3 +1,7 @@
+# 1.0.18
+
+- Added `neosmith.intelligent-pro` to `REWRITTEN_MODELS` list (ex `STEALTH_MODELS`)
+
 # 1.0.17
 
 - Added BFF (backend for frontend) endpoints

@@ -11,7 +11,7 @@
         "@mtcute/bun": "^0.32.1",
         "@mtcute/html-parser": "^0.32.1",
         "@nirelc/microconf": "^0.0.3",
-        "@opencode-ai/models": "^0.0.95",
+        "@opencode-ai/models": "^0.0.102",
         "altcha-lib": "^2.4.0",
         "elysia": "latest",
         "elysia-http-status-code": "^1.0.9",
@@ -61,7 +61,7 @@
 
     "@nirelc/microtype": ["@nirelc/microtype@0.0.3", "https://registry.nirel.cc/npm/@nirelc/microtype/-/microtype-0.0.3.tgz", {}, "sha512-jvLsuBx02/LU70O323sCri+/84WnMS1CgGkXpbGWl7DN/Lae0jw7lgLe9c43pXXguKOA8hSVgJuM9kkXszjYdA=="],
 
-    "@opencode-ai/models": ["@opencode-ai/models@0.0.95", "https://registry.nirel.cc/npm/@opencode-ai/models/-/models-0.0.95.tgz", { "peerDependencies": { "effect": "4.0.0-beta.83" }, "optionalPeers": ["effect"] }, "sha512-f7cQWkUtO3NS7UPnFuaIyKlL3TqChnlqIoPN68GH0rVVBurkl+G2LBbFdzOf0K9NQfXb5EonDL4aZmUfr9uYwA=="],
+    "@opencode-ai/models": ["@opencode-ai/models@0.0.102", "https://registry.nirel.cc/npm/@opencode-ai/models/-/models-0.0.102.tgz", { "peerDependencies": { "effect": "4.0.0-beta.83" }, "optionalPeers": ["effect"] }, "sha512-JwY8pUcgsBa8sBPOqyJ93PIY3oH80GznZB67ef32EQnLRAaJH3hstfBr+UwNjOM9UJ9le8MwuxrGs3SQ882zCg=="],
 
     "@sinclair/typebox": ["@sinclair/typebox@0.34.52", "https://registry.nirel.cc/npm/@sinclair/typebox/-/typebox-0.34.52.tgz", {}, "sha512-XiMQh7qqVlxZzcVD+kkGMNGMzcTrDMLWI7S4x7z1MkCkbDPrekpZXEUK0eZqZFMuHQg2a2DZOcDIh9o5v3Gonw=="],
 

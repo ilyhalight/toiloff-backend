@@ -55,7 +55,7 @@ export abstract class LLMModelsService {
       modelId = MODEL_NAME_OVERRIDE[modelId as keyof typeof MODEL_NAME_OVERRIDE];
     }
 
-    if (/deepseek-v4(\.|-)1(f|-flash)-(\d+1017)/.exec(modelId)?.length) {
+    if (/deepseek-v4(\.|-)1(f|-flash)-((\d+)1017)/.exec(modelId)?.length) {
       modelId = "deepseek-v4.1-flash";
     }
 

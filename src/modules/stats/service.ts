@@ -16,7 +16,7 @@ const MODELS_CLIENT = Models.make();
 const snapshot = () => import("@opencode-ai/models/snapshot");
 const MODEL_NAME_OVERRIDE = {
   "muse-spark-1.3-contributor-free": "muse-spark-1.3",
-  "deepseek-flash": "deepseek-v4.1",
+  "deepseek-flash": "deepseek-v4.1-flash",
 } as const;
 
 const REWRITTEN_MODELS = {
